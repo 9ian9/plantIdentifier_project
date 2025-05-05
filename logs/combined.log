@@ -1,0 +1,133 @@
+2025-05-05T08:32:17.412Z [info]: Processing message: chào
+2025-05-05T08:32:17.446Z [info]: Chat interaction - Input: chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T08:32:24.073Z [info]: Processing message: hi
+2025-05-05T08:32:24.077Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T08:32:27.406Z [info]: Processing message: cây lúa
+2025-05-05T08:32:27.410Z [info]: Chat interaction - Input: cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T08:32:52.113Z [info]: Processing message: chào bạn
+2025-05-05T08:32:52.116Z [info]: Chat interaction - Input: chào bạn | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T08:57:45.117Z [info]: Processing message: đặc điểm sinh học của cây lúa
+2025-05-05T08:57:45.165Z [info]: Chat interaction - Input: đặc điểm sinh học của cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T08:58:44.060Z [info]: Classifier training completed
+2025-05-05T08:58:52.225Z [info]: Processing message: chào
+2025-05-05T08:58:52.227Z [info]: Chat interaction - Input: chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:01:02.889Z [info]: Processing message: hi
+2025-05-05T09:01:02.890Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:04:22.069Z [info]: Processing message: chào
+2025-05-05T09:04:22.078Z [info]: Chat interaction - Input: chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:04:35.072Z [info]: Processing message: hi
+2025-05-05T09:04:35.075Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:08:34.983Z [info]: Classifier training completed
+2025-05-05T09:08:42.129Z [info]: Processing message: hi
+2025-05-05T09:08:42.130Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:12:56.167Z [info]: Processing message: chào
+2025-05-05T09:12:56.212Z [error]: Chat processing error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-05-05T09:12:56.242Z [info]: Chat interaction - Input: chào | Output: Đã xảy ra lỗi khi xử lý yêu cầu của bạn.
+2025-05-05T09:13:06.857Z [info]: Processing message: hi
+2025-05-05T09:13:06.909Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:16:57.006Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn hỏi về loại cây nào?
+2025-05-05T09:17:00.624Z [info]: Chat interaction - Input: cây lúa | Output: Lúa là cây lương thực quan trọng, ưa khí hậu nhiệt đới.
+2025-05-05T09:18:34.288Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T09:18:53.423Z [info]: Chat interaction - Input: tên khoa học của cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:23:06.038Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T09:23:27.766Z [info]: Chat interaction - Input: cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:56:22.196Z [info]: Chat interaction - Input: chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T09:56:27.820Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T10:04:42.878Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T10:04:46.368Z [info]: Chat interaction - Input: cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T10:07:43.925Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T10:07:51.899Z [info]: Chat interaction - Input: tên khoa học cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T10:15:02.047Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T10:15:16.428Z [info]: Chat interaction - Input: tên khoa học cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T13:54:51.779Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T13:54:58.927Z [info]: Chat interaction - Input: tên khoa học cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T13:55:10.177Z [info]: Chat interaction - Input: khoa học cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T13:55:14.771Z [info]: Chat interaction - Input: cây xoài | Output: Tên khoa học của cây xoài là Mangifera indica.
+2025-05-05T13:55:26.755Z [info]: Chat interaction - Input: cà phê | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T13:55:36.079Z [info]: Chat interaction - Input: cây cà phê | Output: Tên khoa học của cây cà phê là Coffea spp.
+2025-05-05T13:55:49.618Z [info]: Chat interaction - Input: tiêu | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T13:55:53.539Z [info]: Chat interaction - Input: cây tiêu | Output: Tên khoa học của cây tiêu là Piper nigrum.
+2025-05-05T14:02:01.257Z [info]: Chat interaction - Input: đặc điểm sinh học câ lúa | Output: Cây lúa thuộc họ Poaceae, thân thảo, cao 1-1.8m. Lá dài, hẹp, có bẹ ôm thân. Rễ chùm, phát triển trong đất ngập nước.
+2025-05-05T14:02:20.578Z [info]: Chat interaction - Input: cây xoài | Output: Tên khoa học của cây xoài là Mangifera indica.
+2025-05-05T14:02:31.938Z [info]: Chat interaction - Input: đặc điểm sinh học cây xòa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:02:41.528Z [info]: Chat interaction - Input: đặc điểm sinh học cây xòai | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:03:25.106Z [info]: Chat interaction - Input: cây xoài có đặc điểm sinh học gì | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:04:29.918Z [info]: Chat interaction - Input: đặc điểm sinh học cây lúa | Output: Cây lúa thuộc họ Poaceae, thân thảo, cao 1-1.8m. Lá dài, hẹp, có bẹ ôm thân. Rễ chùm, phát triển trong đất ngập nước.
+2025-05-05T14:04:56.728Z [info]: Chat interaction - Input: cây lúa có đặc điểm sinh học gì | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:06:27.950Z [info]: Chat interaction - Input: cho biết tên khoa học của cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:06:44.023Z [info]: Chat interaction - Input: tên khoa học cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T14:10:00.181Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T14:10:02.375Z [info]: Chat interaction - Input: cho biết tên khoa học của cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:10:19.441Z [info]: Chat interaction - Input: tên khoa học cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T14:15:05.599Z [info]: Chat interaction - Input: cây lúa có tên khoa học là gì | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:18:30.020Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T14:18:33.953Z [info]: Chat interaction - Input: cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:18:48.335Z [info]: Chat interaction - Input: cho tôi biết tên khoa học của cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:19:35.606Z [info]: Chat interaction - Input: tên khoa học cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:23:09.829Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T14:23:13.629Z [info]: Chat interaction - Input: cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:23:20.442Z [info]: Chat interaction - Input: đặc điểm sinh học cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:29:49.883Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:29:52.718Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T14:30:04.143Z [info]: Chat interaction - Input: đặc điểm sinh học cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:30:22.959Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:32:10.085Z [info]: Chat interaction - Input: CHÀO | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T14:32:16.649Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:32:19.698Z [info]: Chat interaction - Input: hello | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:33:31.067Z [info]: Chat interaction - Input: chào bạn | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:34:26.611Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:34:29.322Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T14:40:51.257Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:40:54.719Z [info]: Chat interaction - Input: chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:40:56.688Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:43:24.140Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T14:43:27.199Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:43:33.546Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:43:35.706Z [info]: Chat interaction - Input: hello | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:44:41.349Z [info]: Chat interaction - Input: cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T14:44:50.035Z [info]: Chat interaction - Input: cây lúa tên khoa học | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T14:45:00.650Z [info]: Chat interaction - Input: cho tôi biết cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:45:47.644Z [info]: Chat interaction - Input: cây lúa có tên khoa học là gì | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:48:48.900Z [info]: Chat interaction - Input: cây  lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T14:54:45.516Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:55:24.397Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:55:26.107Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T14:56:01.907Z [info]: Chat interaction - Input: buổi sáng | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:56:08.007Z [info]: Chat interaction - Input: chào sáng | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:58:18.100Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:58:20.265Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:58:22.423Z [info]: Chat interaction - Input: hello | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:58:24.676Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T14:59:19.840Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:59:22.516Z [info]: Chat interaction - Input: hi | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T14:59:25.459Z [info]: Chat interaction - Input: hello | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T14:59:30.202Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T14:59:35.210Z [info]: Chat interaction - Input: chào buổi sáng | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T14:59:40.319Z [info]: Chat interaction - Input: chào buổi chiều | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:01:03.732Z [info]: Chat interaction - Input: chào bạn | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:05:07.515Z [info]: Chat interaction - Input: xin chào | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:05:10.220Z [info]: Chat interaction - Input: hi | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:05:13.787Z [info]: Chat interaction - Input: hello | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:05:15.889Z [info]: Chat interaction - Input: chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T15:08:54.505Z [info]: Chat interaction - Input: hi | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T15:09:00.279Z [info]: Chat interaction - Input: cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T15:09:05.005Z [info]: Chat interaction - Input: độ ẩm cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T15:09:38.780Z [info]: Chat interaction - Input: đặc điểm sinh học cây lúa | Output: Cây lúa thuộc họ Poaceae, thân thảo, cao 1-1.8m. Lá dài, hẹp, có bẹ ôm thân. Rễ chùm, phát triển trong đất ngập nước.
+2025-05-05T15:09:52.085Z [info]: Chat interaction - Input: đặc điểm sinh học cây xoài | Output: Cây xoài thuộc họ Anacardiaceae, thân gỗ cao 10-15m. Lá đơn, mọc so le, phiến lá dày. Hoa nhỏ, màu trắng hoặc vàng nhạt.
+2025-05-05T15:10:19.670Z [info]: Chat interaction - Input: mô tả đặc điểm sinh học cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:10:53.064Z [info]: Chat interaction - Input: đặc điểm thực vật học cây lúa | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:18:42.404Z [info]: Chat interaction - Input: xin chào | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T15:18:46.391Z [info]: Chat interaction - Input: chào | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T15:18:48.355Z [info]: Chat interaction - Input: hi | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T15:19:05.973Z [info]: Chat interaction - Input: mô tả đặc điểm sinh học cây lúa | Output: Cây lúa thuộc họ Poaceae, thân thảo, cao 1-1.8m. Lá dài, hẹp, có bẹ ôm thân. Rễ chùm, phát triển trong đất ngập nước.
+2025-05-05T15:20:26.163Z [info]: Chat interaction - Input: đặc điểm thực vật học cây xoài | Output: Cây xoài thuộc họ Anacardiaceae, thân gỗ cao 10-15m. Lá đơn, mọc so le, phiến lá dày. Hoa nhỏ, màu trắng hoặc vàng nhạt.
+2025-05-05T15:20:40.380Z [info]: Chat interaction - Input: cây lú | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:20:43.547Z [info]: Chat interaction - Input: cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T15:20:48.390Z [info]: Chat interaction - Input: xoài | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T15:20:55.172Z [info]: Chat interaction - Input: lúa | Output: Chào bạn! Bạn muốn biết thông tin về loại cây nào?
+2025-05-05T15:21:01.297Z [info]: Chat interaction - Input: cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T15:21:04.850Z [info]: Chat interaction - Input: cây xoài | Output: Tên khoa học của cây xoài là Mangifera indica.
+2025-05-05T15:25:44.533Z [info]: Chat interaction - Input: hi | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-05T15:25:47.906Z [info]: Chat interaction - Input: cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-05T15:25:53.876Z [info]: Chat interaction - Input: đặc điểm sinh học | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
+2025-05-05T15:26:00.941Z [info]: Chat interaction - Input: đặc điểm sinh học lúa | Output: Cây lúa thuộc họ Poaceae, thân thảo, cao 1-1.8m. Lá dài, hẹp, có bẹ ôm thân. Rễ chùm, phát triển trong đất ngập nước.

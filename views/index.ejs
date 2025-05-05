@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Plant Identifier</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/script.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>🌿 Plant Identifier</h1>
+            <button class="new-chat">New Chat</button>
+            <div class="recent-chats">
+                <p>Recent Chats</p>
+                <ul>
+                    <li>Garden Roses</li>
+                    <li>Unknown Houseplant</li>
+                    <li>Backyard Weed</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-header">
+                <div class="header-icon">🌿</div>
+                <div class="header-text">Plant Identifier Chat</div>
+            </div>
+
+            <div class="chat-history">
+            </div>
+
+
+
+            <div class="welcome-area">
+                <div class="leaf-icon">🌿</div>
+                <h2>Welcome to Plant Identifier</h2>
+                <p>Upload a photo or ask a question about any plant you want to identify.</p>
+                <div class="action-buttons">
+                    <button class="upload-photo-btn">
+                        <span>Upload a photo</span>
+                        <span>Upload a clear image of the plant you want to identify</span>
+                    </button>
+                    <button class="ask-question-btn">
+                        <span>Ask a question</span>
+                        <span>Ask about plant care, species information, or growing tips</span>
+                    </button>
+                </div>
+            </div>
+            <div class="input-area">
+                <input type="text" placeholder="Ask about a plant or upload an image...">
+                <button class="attach-btn">📎</button>
+                <button class="send-btn">➤</button>
+            </div>
+        </div>
+    </div>
+    <form action="/upload" method="POST" enctype="multipart/form-data" style="display: none;">
+        <input type="file" name="plantImage" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <% if (uploadedImage) { %>
+        <div>
+            <h3>Ảnh đã upload:</h3>
+            <img src="<%= uploadedImage %>" alt="Uploaded Plant" style="max-width: 300px;">
+        </div>
+        <% } %>
+
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9fdfb;
+    height: 100vh;
+    display: flex;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    width: 20%;
+    background-color: #eaf7ee;
+    padding: 20px;
+}
+
+.sidebar h1 {
+    color: #006400;
+}
+
+.new-chat {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.recent-chats p {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.recent-chats ul {
+    list-style: none;
+    padding: 0;
+}
+
+.recent-chats li {
+    padding: 5px 0;
+    color: green;
+    cursor: pointer;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* Kéo giãn các phần tử con theo chiều ngang */
+    padding: 0;
+    /* Loại bỏ padding mặc định của main-content */
+}
+
+.welcome-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 150px;
+    /* Tạo khoảng cách với khu vực input */
+}
+
+.leaf-icon {
+    font-size: 3em;
+    color: #008000;
+    margin-bottom: 10px;
+}
+
+.welcome-area h2 {
+    color: #006400;
+    margin-bottom: 10px;
+}
+
+.welcome-area p {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.upload-photo-btn,
+.ask-question-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 200px;
+    background-color: #f0fff0;
+    border: 1px solid #e0eee0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #006400;
+    text-align: center;
+}
+
+.upload-photo-btn span:first-child,
+.ask-question-btn span:first-child {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.upload-photo-btn:hover,
+.ask-question-btn:hover {
+    background-color: #e0eee0;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+    /* Căn giữa theo chiều ngang */
+    border: 1px solid #ccc;
+    /* Đường viền xám nhạt */
+    border-radius: 8px;
+    /* Bo góc */
+    padding: 15px 20px;
+    /* Khoảng cách bên trong */
+    background-color: #ffffff;
+    /* Nền trắng (nếu cần) */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Bóng nhẹ */
+}
+
+.input-area input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+.input-area button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 50%;
+    /* Tạo hình tròn */
+    background-color: #e0eee0;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #555;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-area .send-btn {
+    background-color: #8fbc8f;
+    color: white;
+}
+
+.input-area .send-btn:hover {
+    background-color: #6b8e23;
+}
+
+.input-area .attach-btn:hover {
+    background-color: #d3d3d3;
+}
+
+.chat-header {
+    background-color: #f0f0f0;
+    /* Màu nền tương tự ChatGPT */
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-icon {
+    font-size: 1.5em;
+    color: #4caf50;
+    /* Màu xanh lá cây */
+}
+
+.header-text {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px 20px;
+    /* Thêm padding cho khu vực chat */
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-message,
+.bot-message {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    clear: both;
+    /* Đảm bảo các tin nhắn không bị float bên cạnh nhau */
+}
+
+.user-message {
+    background-color: #cce5ff;
+    align-self: flex-end;
+    /* Căn phải tin nhắn bot */
+}
+
+.bot-message {
+    background-color: #a4e5a4;
+    align-self: flex-start;
+    /* Căn trái tin nhắn người dùng */
+}

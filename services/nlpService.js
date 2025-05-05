@@ -1,0 +1,81 @@
+const natural = require('natural');
+const tokenizer = new natural.WordTokenizer();
+const logger = require('../utils/logger');
+const intents = require('../models/intents');
+
+// Danh sách stopwords tiếng Việt rút gọn
+const VIETNAMESE_STOPWORDS = ['à', 'bị', 'bởi', 'cả', 'các', 'cái', 'cho', 'chứ', 'có', 'của'];
+
+class NLPService {
+    constructor() {
+        this.classifier = new natural.BayesClassifier();
+        this.initializeClassifier();
+    }
+
+    initializeClassifier() {
+        console.log('Training classifier with intents:');
+        Object.entries(intents).forEach(([intentName, intentData]) => {
+            console.log(`Intent: ${intentName}`);
+            console.log('Patterns:', intentData.patterns);
+
+            intentData.patterns.forEach(pattern => {
+                const processed = this.simplePreprocess(pattern);
+                this.classifier.addDocument(processed, intentName);
+            });
+        });
+
+        this.classifier.train();
+        console.log('Training completed');
+    }
+
+    simplePreprocess(text) {
+        return text.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Bỏ dấu
+            .replace(/[^\w\s]/g, '') // Bỏ ký tự đặc biệt
+            .replace(/\s+/g, ' '); // Chuẩn hóa khoảng trắng
+    }
+
+    findBestIntent(userInput) {
+        try {
+            const processedInput = this.simplePreprocess(userInput);
+            const classifications = this.classifier.getClassifications(processedInput);
+
+            console.log('Classifications for input:', processedInput, classifications);
+            if (classifications.length === 0) return null;
+
+            const topClassification = classifications[0];
+
+            // Ngưỡng confidence thấp hơn cho giai đoạn đầu
+            if (topClassification.value < 0.01) {
+                return null;
+            }
+
+            const intent = intents[topClassification.label];
+            if (intent && intent.entities) {
+                // Tìm thực thể (entity) trong câu
+                const matchedEntity = intent.entities.find(entity =>
+                    processedInput.includes(this.simplePreprocess(entity))
+                );
+                if (matchedEntity) {
+                    const response = intent.responses[matchedEntity];
+                    return {
+                        intent: topClassification.label,
+                        confidence: topClassification.value,
+                        entity: matchedEntity,
+                        response: response
+                    };
+                }
+            }
+
+            return {
+                intent: topClassification.label,
+                confidence: topClassification.value
+            };
+        } catch (error) {
+            logger.error(`NLP error: ${error}`);
+            return null;
+        }
+    }
+}
+
+module.exports = new NLPService();
