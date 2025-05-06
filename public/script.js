@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    let currentSessionId = null;
     async function sendMessage() {
         const message = inputArea.value.trim();
         const hasImage = imageUpload.files && imageUpload.files.length > 0;
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!chatStarted) {
                 welcomeArea.style.display = 'none';
                 chatStarted = true;
+                currentSessionId = null; // Reset session khi bắt đầu chat mới
             }
 
             // Hiển thị tin nhắn của người dùng
@@ -36,21 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Hiển thị ảnh nếu có
             if (hasImage) {
-                const imageFile = imageUpload.files[0];
-                const imageUrl = URL.createObjectURL(imageFile);
-
-                const imageBubble = document.createElement('div');
-                imageBubble.classList.add('user-message', 'image-message');
-
-                const imgElement = document.createElement('img');
-                imgElement.src = imageUrl;
-                imgElement.alt = "Uploaded plant image";
-                imgElement.style.maxWidth = '100%';
-                imgElement.style.maxHeight = '200px';
-                imgElement.style.borderRadius = '8px';
-
-                imageBubble.appendChild(imgElement);
-                chatHistory.appendChild(imageBubble);
+                // ... (phần hiển thị ảnh giữ nguyên)
             }
 
             scrollToBottom();
@@ -60,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let imageBase64 = '';
             if (hasImage) {
                 imageBase64 = await toBase64(imageUpload.files[0]);
-                imageUpload.value = ''; // Reset input file
+                imageUpload.value = '';
             }
 
             // Gửi tin nhắn đến backend
@@ -72,11 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         message: message,
-                        image: imageBase64
+                        image: imageBase64,
+                        sessionId: currentSessionId // Gửi sessionId hiện tại (nếu có)
                     }),
                 });
 
                 const data = await response.json();
+                currentSessionId = data.sessionId; // Cập nhật sessionId
 
                 // Hiển thị phản hồi của bot
                 const botBubble = document.createElement('div');

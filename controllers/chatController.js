@@ -1,68 +1,105 @@
-const ChatHistory = require('../models/ChatHistory');
+const ChatSession = require('../models/ChatHistory');
 const chatService = require('../services/chatService');
 const logger = require('../utils/logger');
-const { setTimeout } = require('timers/promises');
+const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
-async function saveChatHistory(message, response, image) {
-    const maxRetries = 3;
-    let attempt = 0;
+// Tạo hoặc cập nhật phiên chat
+async function updateChatSession(sessionId, role, content, image = null) {
+    try {
+        const update = {
+            $push: {
+                messages: {
+                    role,
+                    content,
+                    image: image ? `data:image/jpeg;base64,${image}` : undefined
+                }
+            },
+            $set: { updatedAt: new Date() }
+        };
 
-    while (attempt < maxRetries) {
-        try {
-            const chatRecord = new ChatHistory({
-                message: message || '[Image only]',
-                response: response,
-                image: image || undefined
+        if (!sessionId) {
+            // Tạo phiên mới nếu không có sessionId
+            const newSessionId = uuidv4();
+            update.$set.sessionId = newSessionId;
+            update.$set.createdAt = new Date();
+
+            await ChatSession.create({
+                sessionId: newSessionId,
+                messages: [{
+                    role,
+                    content,
+                    image: image ? `data:image/jpeg;base64,${image}` : undefined
+                }]
             });
 
-            await chatRecord.save();
-            logger.info('Chat history saved successfully');
-            return true;
-        } catch (error) {
-            attempt++;
-            logger.warn(`Attempt ${attempt} failed to save chat history. ${error.message}`);
-
-            if (attempt === maxRetries) {
-                logger.error(`Failed to save after ${maxRetries} attempts:`, error);
-                return false;
-            }
-
-            // Chờ trước khi thử lại
-            await setTimeout(1000 * attempt);
+            return newSessionId;
+        } else {
+            // Cập nhật phiên hiện có
+            await ChatSession.findOneAndUpdate({ sessionId },
+                update, { upsert: false }
+            );
+            return sessionId;
         }
+    } catch (error) {
+        logger.error('Error updating chat session:', error);
+        throw error;
     }
 }
 
 exports.handleChat = [
-    upload.single('image'), // Xử lý upload ảnh
+    upload.single('image'),
     async(req, res) => {
         try {
-            const { message } = req.body;
+            const { message, sessionId } = req.body;
             let imageBase64 = '';
 
-            // Xử lý ảnh nếu có
             if (req.file) {
                 imageBase64 = req.file.buffer.toString('base64');
             }
 
-            // Xử lý tin nhắn và tạo phản hồi
+            // Xử lý tin nhắn
             const response = await chatService.processMessage(message || '[Image]');
 
-            // Lưu vào database
-            const chatRecord = new ChatHistory({
-                message: message || '[Image Upload]',
-                response: response,
-                image: req.file ? `data:${req.file.mimetype};base64,${imageBase64}` : undefined
+            // Lưu tin nhắn người dùng
+            const newSessionId = await updateChatSession(
+                sessionId,
+                'user',
+                message || '[Image Upload]',
+                imageBase64
+            );
+
+            // Lưu phản hồi của bot
+            await updateChatSession(
+                newSessionId,
+                'assistant',
+                response
+            );
+
+            res.json({
+                response,
+                sessionId: newSessionId
             });
-
-            await chatRecord.save();
-
-            res.json({ response });
         } catch (error) {
             console.error('Error:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }
 ];
+
+// Lấy lịch sử chat theo phiên
+exports.getChatHistory = async(req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const session = await ChatSession.findOne({ sessionId });
+
+        if (!session) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        res.json(session);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch chat history' });
+    }
+};

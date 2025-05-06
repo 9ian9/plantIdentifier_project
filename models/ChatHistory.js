@@ -1,11 +1,18 @@
+// models/ChatHistory.js
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 
-const chatHistorySchema = new Schema({
-    message: { type: String, required: true },
-    response: { type: String, required: true },
-    image: { type: String }, // Lưu dạng base64
-    createdAt: { type: Date, default: Date.now, index: { expires: '30d' } } // Tự động xóa sau 30 ngày
+const messageSchema = new mongoose.Schema({
+    role: { type: String, enum: ['user', 'assistant'], required: true },
+    content: { type: String, required: true },
+    image: { type: String }, // base64 image if any
+    timestamp: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('ChatHistory', chatHistorySchema);
+const chatSessionSchema = new mongoose.Schema({
+    sessionId: { type: String, required: true, unique: true },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
+    messages: [messageSchema]
+});
+
+module.exports = mongoose.model('ChatSession', chatSessionSchema);
