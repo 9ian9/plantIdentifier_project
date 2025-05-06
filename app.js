@@ -14,12 +14,12 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 // app.use(express.json());
 app.use('/chat', chatRouter);
-// Routes tạm thời
-app.get('/', (req, res) => {
-    res.render('index', { uploadedImage: null });
-});
+const chatController = require('./controllers/chatController');
+const chatHistoryRouter = require('./routes/historyRouter');
+app.get('/', chatController.renderIndex);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use('/chat/history', chatHistoryRouter);
 (async() => {
     try {
         await connectDB();

@@ -6,40 +6,33 @@ const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Tạo hoặc cập nhật phiên chat
+// Trong chatController.js
 async function updateChatSession(sessionId, role, content, image = null) {
     try {
-        const update = {
-            $push: {
-                messages: {
-                    role,
-                    content,
-                    image: image ? `data:image/jpeg;base64,${image}` : undefined
-                }
-            },
-            $set: { updatedAt: new Date() }
+        const messageContent = {
+            role,
+            content,
+            image: image ? `data:image/jpeg;base64,${image}` : undefined
         };
 
         if (!sessionId) {
-            // Tạo phiên mới nếu không có sessionId
+            // Tạo phiên mới
             const newSessionId = uuidv4();
-            update.$set.sessionId = newSessionId;
-            update.$set.createdAt = new Date();
+            const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
 
             await ChatSession.create({
                 sessionId: newSessionId,
-                messages: [{
-                    role,
-                    content,
-                    image: image ? `data:image/jpeg;base64,${image}` : undefined
-                }]
+                messages: [messageContent],
+                title: title
             });
 
             return newSessionId;
         } else {
             // Cập nhật phiên hiện có
-            await ChatSession.findOneAndUpdate({ sessionId },
-                update, { upsert: false }
-            );
+            await ChatSession.findOneAndUpdate({ sessionId }, {
+                $push: { messages: messageContent },
+                $set: { updatedAt: new Date() }
+            }, { new: true });
             return sessionId;
         }
     } catch (error) {
@@ -101,5 +94,56 @@ exports.getChatHistory = async(req, res) => {
         res.json(session);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch chat history' });
+    }
+};
+// Thêm vào chatController.js
+exports.renderIndex = async(req, res) => {
+    try {
+        const sessions = await ChatSession.find()
+            .sort({ updatedAt: -1 })
+            .limit(10)
+            .select('sessionId messages updatedAt');
+
+        res.render('index', {
+            chatSessions: sessions,
+            uploadedImage: req.query.uploadedImage || null
+        });
+    } catch (error) {
+        console.error('Error rendering index:', error);
+        res.render('index', {
+            chatSessions: [],
+            uploadedImage: req.query.uploadedImage || null
+        });
+    }
+};
+// Trong file chatController.js
+exports.getChatSessions = async(req, res) => {
+    try {
+        const sessions = await ChatSession.find()
+            .sort({ updatedAt: -1 })
+            .limit(10)
+            .select('sessionId title messages updatedAt');
+
+        res.json(sessions);
+    } catch (error) {
+        console.error('Error fetching chat sessions:', error);
+        res.status(500).json({ error: 'Failed to fetch chat sessions' });
+    }
+};
+
+exports.getChatSession = async(req, res) => {
+    try {
+        const session = await ChatSession.findOne({
+            sessionId: req.params.sessionId
+        });
+
+        if (!session) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        res.json(session);
+    } catch (error) {
+        console.error('Error fetching chat session:', error);
+        res.status(500).json({ error: 'Failed to fetch chat session' });
     }
 };

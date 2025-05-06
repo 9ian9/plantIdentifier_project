@@ -12,13 +12,29 @@
     <div class="container">
         <div class="sidebar">
             <h1>🌿 Plant Identifier</h1>
-            <button class="new-chat">New Chat</button>
+            <button class="new-chat" id="newChatBtn">New Chat</button>
             <div class="recent-chats">
                 <p>Recent Chats</p>
-                <ul>
-                    <li>Garden Roses</li>
-                    <li>Unknown Houseplant</li>
-                    <li>Backyard Weed</li>
+                <ul id="chatSessionsList">
+                    <!-- Các phiên chat sẽ được load động ở đây -->
+                    <% if (chatSessions && chatSessions.length> 0) { %>
+                        <% chatSessions.forEach(session=> { %>
+                            <li class="chat-session" data-session-id="<%= session.sessionId %>">
+                                <div class="session-title">
+                                    <%= session.title || 'New Chat' %>
+                                </div>
+                                <div class="session-preview">
+                                    <%= session.messages[0]?.content.substring(0, 30) +
+                                        (session.messages[0]?.content.length> 30 ? '...' : '') %>
+                                </div>
+                                <div class="session-date">
+                                    <%= new Date(session.updatedAt).toLocaleString() %>
+                                </div>
+                            </li>
+                            <% }); %>
+                                <% } else { %>
+                                    <li class="no-sessions">No recent chats</li>
+                                    <% } %>
                 </ul>
             </div>
         </div>
@@ -26,41 +42,36 @@
         <div class="main-content">
             <div class="chat-header">
                 <div class="header-icon">🌿</div>
-                <div class="header-text">Plant Identifier Chat</div>
+                <div class="header-text" id="chatTitle">Plant Identifier Chat</div>
             </div>
 
-            <div class="chat-history">
+            <div class="chat-history" id="chatHistory">
+                <!-- Nội dung chat sẽ được load động ở đây -->
             </div>
 
-
-
-            <div class="welcome-area">
+            <div class="welcome-area" id="welcomeArea">
                 <div class="leaf-icon">🌿</div>
                 <h2>Welcome to Plant Identifier</h2>
                 <p>Upload a photo or ask a question about any plant you want to identify.</p>
                 <div class="action-buttons">
-                    <button class="upload-photo-btn">
+                    <button class="upload-photo-btn" id="uploadPhotoBtn">
                         <span>Upload a photo</span>
                         <span>Upload a clear image of the plant you want to identify</span>
                     </button>
-                    <button class="ask-question-btn">
+                    <button class="ask-question-btn" id="askQuestionBtn">
                         <span>Ask a question</span>
                         <span>Ask about plant care, species information, or growing tips</span>
                     </button>
                 </div>
             </div>
             <div class="input-area">
-                <input type="text" placeholder="Ask about a plant or upload an image...">
+                <input type="text" id="messageInput" placeholder="Ask about a plant or upload an image...">
                 <input type="file" id="image-upload" accept="image/*" style="display: none;">
                 <button class="attach-btn">📎</button>
                 <button class="send-btn">➤</button>
             </div>
         </div>
     </div>
-    <form action="/upload" method="POST" enctype="multipart/form-data" style="display: none;">
-        <input type="file" name="plantImage" accept="image/*" required>
-        <button type="submit">Upload</button>
-    </form>
 
     <% if (uploadedImage) { %>
         <div>
@@ -69,6 +80,117 @@
         </div>
         <% } %>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const chatSessionsList = document.getElementById('chatSessionsList');
+                    const newChatBtn = document.getElementById('newChatBtn');
+                    const chatHistory = document.getElementById('chatHistory');
+                    const welcomeArea = document.getElementById('welcomeArea');
+                    const messageInput = document.getElementById('messageInput');
+                    const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+                    const askQuestionBtn = document.getElementById('askQuestionBtn');
+                    let currentSessionId = null;
+
+                    // Load nội dung chat khi click vào một phiên
+                    chatSessionsList.addEventListener('click', async(e) => {
+                        const sessionItem = e.target.closest('.chat-session');
+                        if (!sessionItem) return;
+
+                        const sessionId = sessionItem.dataset.sessionId;
+                        currentSessionId = sessionId;
+
+                        try {
+                            const response = await fetch(`/chat/history/${sessionId}`);
+                            const sessionData = await response.json();
+
+                            // Hiển thị nội dung chat
+                            chatHistory.innerHTML = '';
+                            welcomeArea.style.display = 'none';
+
+                            sessionData.messages.forEach(msg => {
+                                const bubble = document.createElement('div');
+                                bubble.classList.add(msg.role === 'user' ? 'user-message' : 'bot-message');
+
+                                if (msg.image) {
+                                    const imgElement = document.createElement('img');
+                                    imgElement.src = msg.image;
+                                    imgElement.alt = "Uploaded plant image";
+                                    imgElement.style.maxWidth = '100%';
+                                    imgElement.style.maxHeight = '200px';
+                                    imgElement.style.borderRadius = '8px';
+                                    bubble.appendChild(imgElement);
+                                }
+
+                                if (msg.content) {
+                                    const textNode = document.createTextNode(msg.content);
+                                    bubble.appendChild(textNode);
+                                }
+
+                                chatHistory.appendChild(bubble);
+                            });
+
+                            scrollToBottom();
+                        } catch (error) {
+                            console.error('Error loading chat session:', error);
+                        }
+                    });
+
+                    // Tạo chat mới
+                    newChatBtn.addEventListener('click', () => {
+                        currentSessionId = null;
+                        chatHistory.innerHTML = '';
+                        welcomeArea.style.display = 'flex';
+                        messageInput.value = '';
+                    });
+
+                    // Focus vào input khi click nút hỏi
+                    askQuestionBtn.addEventListener('click', () => {
+                        messageInput.focus();
+                    });
+
+                    // Mở dialog upload ảnh
+                    uploadPhotoBtn.addEventListener('click', () => {
+                        document.getElementById('image-upload').click();
+                    });
+
+                    function scrollToBottom() {
+                        chatHistory.scrollTop = chatHistory.scrollHeight;
+                    }
+
+                    // Cập nhật danh sách phiên chat mỗi khi có thay đổi
+                    // Thay đổi các URL API trong script
+                    async function refreshChatSessions() {
+                        try {
+                            const response = await fetch('/chat/history/sessions');
+                            const sessions = await response.json();
+
+                            if (sessions.length > 0) {
+                                chatSessionsList.innerHTML = sessions.map(session => `
+          <li class="chat-session" data-session-id="${session.sessionId}">
+            <div class="session-title">${session.title || 'New Chat'}</div>
+            <div class="session-preview">
+              ${session.messages[0]?.content.substring(0, 30) + (session.messages[0]?.content.length > 30 ? '...' : '')}
+            </div>
+            <div class="session-date">
+              ${new Date(session.updatedAt).toLocaleString()}
+            </div>
+          </li>
+        `).join('');
+                            } else {
+                                chatSessionsList.innerHTML = '<li class="no-sessions">No recent chats</li>';
+                            }
+                        } catch (error) {
+                            console.error('Error refreshing chat sessions:', error);
+                        }
+                    }
+
+                    // Và khi load chat session
+                    const response = await fetch(`/chat/history/session/${sessionId}`);
+
+                    // Gọi lần đầu khi trang load
+                    refreshChatSessions();
+                });
+            </script>
 </body>
 
 </html>
