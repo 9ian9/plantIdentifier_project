@@ -1,28 +1,68 @@
+const ChatHistory = require('../models/ChatHistory');
 const chatService = require('../services/chatService');
 const logger = require('../utils/logger');
+const { setTimeout } = require('timers/promises');
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 
-exports.handleChat = async(req, res, next) => {
-    try {
-        const { message, context } = req.body;
+async function saveChatHistory(message, response, image) {
+    const maxRetries = 3;
+    let attempt = 0;
 
-        if (!message || typeof message !== 'string') {
-            return res.status(400).json({
-                error: 'Invalid message format',
-                details: 'Message must be a non-empty string'
+    while (attempt < maxRetries) {
+        try {
+            const chatRecord = new ChatHistory({
+                message: message || '[Image only]',
+                response: response,
+                image: image || undefined
             });
+
+            await chatRecord.save();
+            logger.info('Chat history saved successfully');
+            return true;
+        } catch (error) {
+            attempt++;
+            logger.warn(`Attempt ${attempt} failed to save chat history. ${error.message}`);
+
+            if (attempt === maxRetries) {
+                logger.error(`Failed to save after ${maxRetries} attempts:`, error);
+                return false;
+            }
+
+            // Chờ trước khi thử lại
+            await setTimeout(1000 * attempt);
         }
-
-        const response = chatService.processMessage(message);
-
-        logger.info(`Chat interaction - Input: ${message} | Output: ${response}`);
-
-        res.json({
-            response,
-            context: context || {}, // Có thể sử dụng để duy trì ngữ cảnh
-            timestamp: new Date().toISOString(),
-            status: 'success'
-        });
-    } catch (error) {
-        next(error);
     }
-};
+}
+
+exports.handleChat = [
+    upload.single('image'), // Xử lý upload ảnh
+    async(req, res) => {
+        try {
+            const { message } = req.body;
+            let imageBase64 = '';
+
+            // Xử lý ảnh nếu có
+            if (req.file) {
+                imageBase64 = req.file.buffer.toString('base64');
+            }
+
+            // Xử lý tin nhắn và tạo phản hồi
+            const response = await chatService.processMessage(message || '[Image]');
+
+            // Lưu vào database
+            const chatRecord = new ChatHistory({
+                message: message || '[Image Upload]',
+                response: response,
+                image: req.file ? `data:${req.file.mimetype};base64,${imageBase64}` : undefined
+            });
+
+            await chatRecord.save();
+
+            res.json({ response });
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+];

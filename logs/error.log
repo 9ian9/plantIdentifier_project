@@ -1,1 +1,8 @@
 2025-05-05T09:12:56.212Z [error]: Chat processing error: TypeError: Cannot read properties of undefined (reading 'length')
+2025-05-06T01:09:08.837Z [error]: Failed to save chat history: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:09:24.243Z [error]: Failed to save chat history: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:11:51.560Z [error]: Failed to save chat history: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:47:11.363Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:47:15.009Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:31:56.901Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:32:01.316Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms

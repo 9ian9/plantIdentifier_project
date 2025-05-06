@@ -131,3 +131,32 @@
 2025-05-05T15:25:47.906Z [info]: Chat interaction - Input: cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
 2025-05-05T15:25:53.876Z [info]: Chat interaction - Input: đặc điểm sinh học | Output: Xin lỗi, tôi chưa hiểu câu hỏi này. Bạn có thể diễn đạt lại không?
 2025-05-05T15:26:00.941Z [info]: Chat interaction - Input: đặc điểm sinh học lúa | Output: Cây lúa thuộc họ Poaceae, thân thảo, cao 1-1.8m. Lá dài, hẹp, có bẹ ôm thân. Rễ chùm, phát triển trong đất ngập nước.
+2025-05-06T00:16:39.422Z [info]: Chat interaction - Input: hi | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-06T00:16:43.334Z [info]: Chat interaction - Input: cây lúa | Output: Tên khoa học của cây lúa là Oryza sativa L.
+2025-05-06T00:16:53.151Z [info]: Chat interaction - Input: mô tả đặc điểm sinh học cây lúa | Output: Cây lúa thuộc họ Poaceae, thân thảo, cao 1-1.8m. Lá dài, hẹp, có bẹ ôm thân. Rễ chùm, phát triển trong đất ngập nước.
+2025-05-06T00:17:28.507Z [info]: Chat interaction - Input: đặc điểm thực vật học của cây xoài | Output: Cây xoài thuộc họ Anacardiaceae, thân gỗ cao 10-15m. Lá đơn, mọc so le, phiến lá dày. Hoa nhỏ, màu trắng hoặc vàng nhạt.
+2025-05-06T01:04:59.413Z [info]: Chat interaction - Input: j | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-06T01:05:30.739Z [info]: Chat interaction - Input: hi | Output: Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?
+2025-05-06T01:09:08.837Z [error]: Failed to save chat history: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:09:24.243Z [error]: Failed to save chat history: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:11:51.560Z [error]: Failed to save chat history: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:46:48.315Z [warn]: Attempt 1 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:46:51.964Z [warn]: Attempt 1 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:46:59.341Z [warn]: Attempt 2 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:47:02.988Z [warn]: Attempt 2 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:47:11.359Z [warn]: Attempt 3 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:47:11.363Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:47:15.009Z [warn]: Attempt 3 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T01:47:15.009Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:31:33.857Z [warn]: Attempt 1 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:31:38.263Z [warn]: Attempt 1 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:31:44.879Z [warn]: Attempt 2 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:31:49.286Z [warn]: Attempt 2 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:31:56.899Z [warn]: Attempt 3 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:31:56.901Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:32:01.315Z [warn]: Attempt 3 failed to save chat history. Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T02:32:01.316Z [error]: Failed to save after 3 attempts: Operation `chathistories.insertOne()` buffering timed out after 10000ms
+2025-05-06T03:17:25.319Z [info]: Chat history saved successfully
+2025-05-06T03:17:28.296Z [info]: Chat history saved successfully
+2025-05-06T03:30:20.507Z [info]: Chat history saved successfully
+2025-05-06T03:30:23.985Z [info]: Chat history saved successfully
