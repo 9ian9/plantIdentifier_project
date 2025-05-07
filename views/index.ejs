@@ -15,27 +15,30 @@
             <button class="new-chat" id="newChatBtn">New Chat</button>
             <div class="recent-chats">
                 <p>Recent Chats</p>
-                <ul id="chatSessionsList">
-                    <!-- Các phiên chat sẽ được load động ở đây -->
-                    <% if (chatSessions && chatSessions.length> 0) { %>
-                        <% chatSessions.forEach(session=> { %>
-                            <li class="chat-session" data-session-id="<%= session.sessionId %>">
-                                <div class="session-title">
-                                    <%= session.title || 'New Chat' %>
-                                </div>
-                                <div class="session-preview">
-                                    <%= session.messages[0]?.content.substring(0, 30) +
-                                        (session.messages[0]?.content.length> 30 ? '...' : '') %>
-                                </div>
-                                <div class="session-date">
-                                    <%= new Date(session.updatedAt).toLocaleString() %>
-                                </div>
-                            </li>
-                            <% }); %>
-                                <% } else { %>
-                                    <li class="no-sessions">No recent chats</li>
-                                    <% } %>
-                </ul>
+                <div class="chat-sessions-container">
+                    <ul id="chatSessionsList">
+                        <!-- Các phiên chat sẽ được load động ở đây -->
+                        <% if (chatSessions && chatSessions.length> 0) { %>
+                            <% chatSessions.forEach(session=> { %>
+                                <li class="chat-session" data-session-id="<%= session.sessionId %>">
+                                    <div class="session-title">
+                                        <%= session.title || 'New Chat' %>
+                                    </div>
+                                    <div class="session-preview">
+                                        <%= session.messages[0]?.content.substring(0, 30) +
+                                            (session.messages[0]?.content.length> 30 ? '...' : '') %>
+                                    </div>
+                                    <div class="session-date">
+                                        <%= new Date(session.updatedAt).toLocaleString() %>
+                                    </div>
+                                </li>
+                                <% }); %>
+                                    <% } else { %>
+                                        <li class="no-sessions">No recent chats</li>
+                                        <% } %>
+                    </ul>
+                </div>
+
             </div>
         </div>
 
@@ -100,7 +103,10 @@
                         currentSessionId = sessionId;
 
                         try {
-                            const response = await fetch(`/chat/history/${sessionId}`);
+                            const response = await fetch(`/chat/history/session/${sessionId}`);
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
                             const sessionData = await response.json();
 
                             // Hiển thị nội dung chat
@@ -162,20 +168,24 @@
                     async function refreshChatSessions() {
                         try {
                             const response = await fetch('/chat/history/sessions');
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
                             const sessions = await response.json();
 
+                            const chatSessionsList = document.getElementById('chatSessionsList');
                             if (sessions.length > 0) {
                                 chatSessionsList.innerHTML = sessions.map(session => `
-          <li class="chat-session" data-session-id="${session.sessionId}">
-            <div class="session-title">${session.title || 'New Chat'}</div>
-            <div class="session-preview">
-              ${session.messages[0]?.content.substring(0, 30) + (session.messages[0]?.content.length > 30 ? '...' : '')}
-            </div>
-            <div class="session-date">
-              ${new Date(session.updatedAt).toLocaleString()}
-            </div>
-          </li>
-        `).join('');
+                              <li class="chat-session" data-session-id="${session.sessionId}">
+                                <div class="session-title">${session.title || 'New Chat'}</div>
+                                <div class="session-preview">
+                                  ${session.messages[0]?.content?.substring(0, 30) || ''}${session.messages[0]?.content?.length > 30 ? '...' : ''}
+                                </div>
+                                <div class="session-date">
+                                  ${new Date(session.updatedAt).toLocaleString()}
+                                </div>
+                              </li>
+                            `).join('');
                             } else {
                                 chatSessionsList.innerHTML = '<li class="no-sessions">No recent chats</li>';
                             }
@@ -185,10 +195,12 @@
                     }
 
                     // Và khi load chat session
-                    const response = await fetch(`/chat/history/session/${sessionId}`);
+                    //const response = await fetch(`/chat/history/session/${sessionId}`);
 
                     // Gọi lần đầu khi trang load
-                    refreshChatSessions();
+                    (async function init() {
+                        await refreshChatSessions();
+                    })();
                 });
             </script>
 </body>

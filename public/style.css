@@ -227,13 +227,56 @@ body {
     /* Căn trái tin nhắn người dùng */
 }
 
+.recent-chats {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Ẩn overflow để tạo layout scroll */
+    height: calc(100% - 120px);
+    /* Trừ đi chiều cao của header và nút New Chat */
+}
 
-/* Thêm vào file style.css */
-
-.recent-chats ul {
-    list-style: none;
-    padding: 0;
+.recent-chats>p {
+    padding: 10px 15px;
     margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+#chatSessionsList {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Thêm thanh cuộn dọc khi cần */
+    padding: 0 10px;
+    margin: 0;
+    scrollbar-width: thin;
+    /* Cho Firefox */
+}
+
+#chatSessionsList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chatSessionsList::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#chatSessionsList::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+#chatSessionsList::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.chat-sessions-container {
+    flex-grow: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-session {
