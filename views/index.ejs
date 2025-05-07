@@ -6,6 +6,7 @@
     <title>Plant Identifier</title>
     <link rel="stylesheet" href="/style.css">
     <script src="/script.js" defer></script>
+    <script src="/js/chat.js" defer></script>
 </head>
 
 <body>
@@ -22,8 +23,12 @@
                             <% chatSessions.forEach(session=> { %>
                                 <li class="chat-session" data-session-id="<%= session.sessionId %>">
                                     <div class="session-title">
-                                        <%= session.title || 'New Chat' %>
+                                        <div class="title-text">
+                                            <%= session.title || 'New Chat' %>
+                                        </div>
+                                        <input type="text" class="title-edit" value="<%= session.title || 'New Chat' %>" style="display: none;">
                                     </div>
+
                                     <div class="session-preview">
                                         <%= session.messages[0]?.content.substring(0, 30) +
                                             (session.messages[0]?.content.length> 30 ? '...' : '') %>
@@ -82,127 +87,6 @@
             <img src="<%= uploadedImage %>" alt="Uploaded Plant" style="max-width: 300px;">
         </div>
         <% } %>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const chatSessionsList = document.getElementById('chatSessionsList');
-                    const newChatBtn = document.getElementById('newChatBtn');
-                    const chatHistory = document.getElementById('chatHistory');
-                    const welcomeArea = document.getElementById('welcomeArea');
-                    const messageInput = document.getElementById('messageInput');
-                    const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
-                    const askQuestionBtn = document.getElementById('askQuestionBtn');
-                    let currentSessionId = null;
-
-                    // Load nội dung chat khi click vào một phiên
-                    chatSessionsList.addEventListener('click', async(e) => {
-                        const sessionItem = e.target.closest('.chat-session');
-                        if (!sessionItem) return;
-
-                        const sessionId = sessionItem.dataset.sessionId;
-                        currentSessionId = sessionId;
-
-                        try {
-                            const response = await fetch(`/chat/history/session/${sessionId}`);
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            const sessionData = await response.json();
-
-                            // Hiển thị nội dung chat
-                            chatHistory.innerHTML = '';
-                            welcomeArea.style.display = 'none';
-
-                            sessionData.messages.forEach(msg => {
-                                const bubble = document.createElement('div');
-                                bubble.classList.add(msg.role === 'user' ? 'user-message' : 'bot-message');
-
-                                if (msg.image) {
-                                    const imgElement = document.createElement('img');
-                                    imgElement.src = msg.image;
-                                    imgElement.alt = "Uploaded plant image";
-                                    imgElement.style.maxWidth = '100%';
-                                    imgElement.style.maxHeight = '200px';
-                                    imgElement.style.borderRadius = '8px';
-                                    bubble.appendChild(imgElement);
-                                }
-
-                                if (msg.content) {
-                                    const textNode = document.createTextNode(msg.content);
-                                    bubble.appendChild(textNode);
-                                }
-
-                                chatHistory.appendChild(bubble);
-                            });
-
-                            scrollToBottom();
-                        } catch (error) {
-                            console.error('Error loading chat session:', error);
-                        }
-                    });
-
-                    // Tạo chat mới
-                    newChatBtn.addEventListener('click', () => {
-                        currentSessionId = null;
-                        chatHistory.innerHTML = '';
-                        welcomeArea.style.display = 'flex';
-                        messageInput.value = '';
-                    });
-
-                    // Focus vào input khi click nút hỏi
-                    askQuestionBtn.addEventListener('click', () => {
-                        messageInput.focus();
-                    });
-
-                    // Mở dialog upload ảnh
-                    uploadPhotoBtn.addEventListener('click', () => {
-                        document.getElementById('image-upload').click();
-                    });
-
-                    function scrollToBottom() {
-                        chatHistory.scrollTop = chatHistory.scrollHeight;
-                    }
-
-                    // Cập nhật danh sách phiên chat mỗi khi có thay đổi
-                    // Thay đổi các URL API trong script
-                    async function refreshChatSessions() {
-                        try {
-                            const response = await fetch('/chat/history/sessions');
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            const sessions = await response.json();
-
-                            const chatSessionsList = document.getElementById('chatSessionsList');
-                            if (sessions.length > 0) {
-                                chatSessionsList.innerHTML = sessions.map(session => `
-                              <li class="chat-session" data-session-id="${session.sessionId}">
-                                <div class="session-title">${session.title || 'New Chat'}</div>
-                                <div class="session-preview">
-                                  ${session.messages[0]?.content?.substring(0, 30) || ''}${session.messages[0]?.content?.length > 30 ? '...' : ''}
-                                </div>
-                                <div class="session-date">
-                                  ${new Date(session.updatedAt).toLocaleString()}
-                                </div>
-                              </li>
-                            `).join('');
-                            } else {
-                                chatSessionsList.innerHTML = '<li class="no-sessions">No recent chats</li>';
-                            }
-                        } catch (error) {
-                            console.error('Error refreshing chat sessions:', error);
-                        }
-                    }
-
-                    // Và khi load chat session
-                    //const response = await fetch(`/chat/history/session/${sessionId}`);
-
-                    // Gọi lần đầu khi trang load
-                    (async function init() {
-                        await refreshChatSessions();
-                    })();
-                });
-            </script>
 </body>
 
 </html>

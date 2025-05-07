@@ -296,6 +296,20 @@ body {
     margin-bottom: 3px;
 }
 
+.title-edit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0 5px;
+    box-sizing: border-box;
+    font-size: inherit;
+    font-family: inherit;
+}
+
 .session-preview {
     color: #666;
     font-size: 0.9em;
