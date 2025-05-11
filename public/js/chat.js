@@ -69,9 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Mở dialog upload ảnh
-    uploadPhotoBtn.addEventListener('click', () => {
-        document.getElementById('image-upload').click();
-    });
+    // uploadPhotoBtn.addEventListener('click', () => {
+    //     document.getElementById('image-upload').click();
+    // });
 
     function scrollToBottom() {
         chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -111,6 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             inputElement.addEventListener('blur', saveTitleChange);
 
+            // Ngăn sự kiện click lan ra ngoài khi focus vào input rename
+            inputElement.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            inputElement.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+            });
+            inputElement.addEventListener('mouseup', (e) => {
+                e.stopPropagation();
+            });
+            inputElement.addEventListener('keydown', (e) => {
+                e.stopPropagation();
+            });
+
             async function saveTitleChange() {
                 const newTitle = inputElement.value.trim();
                 if (newTitle && newTitle !== textElement.textContent) {
@@ -128,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (response.ok) {
                             textElement.textContent = newTitle;
+                            // KHÔNG gọi refreshChatSessions ở đây để tránh mất phông chat
                         } else {
                             console.error('Failed to update title');
                         }
@@ -159,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="session-title">
                             <div class="title-text">${session.title || 'New Chat'}</div>
                             <input type="text" class="title-edit" value="${session.title || 'New Chat'}" style="display: none;">
+                            <button class="delete-session-btn" title="Delete chat">🗑️</button>
                         </div>
                         <div class="session-preview">
                             ${session.messages[0]?.content?.substring(0, 30) || ''}${session.messages[0]?.content?.length > 30 ? '...' : ''}
@@ -168,10 +184,41 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </li>
                 `).join('');
+
+                // Thêm event listener cho nút xóa
+                document.querySelectorAll('.delete-session-btn').forEach(btn => {
+                    btn.addEventListener('click', async(e) => {
+                        e.stopPropagation(); // Ngăn chặn sự kiện click lan ra session
+                        const sessionItem = btn.closest('.chat-session');
+                        const sessionId = sessionItem.dataset.sessionId;
+
+                        if (confirm('Are you sure you want to delete this chat?')) {
+                            try {
+                                const response = await fetch(`/chat/history/session/${sessionId}`, {
+                                    method: 'DELETE'
+                                });
+
+                                if (response.ok) {
+                                    sessionItem.remove();
+                                    // Nếu đang xem session bị xóa, reset về màn hình chào
+                                    if (currentSessionId === sessionId) {
+                                        currentSessionId = null;
+                                        chatHistory.innerHTML = '';
+                                        welcomeArea.style.display = 'flex';
+                                    }
+                                } else {
+                                    console.error('Failed to delete session');
+                                }
+                            } catch (error) {
+                                console.error('Error deleting session:', error);
+                            }
+                        }
+                    });
+                });
             } else {
                 chatSessionsList.innerHTML = '<li class="no-sessions">No recent chats</li>';
             }
-            setTimeout(setupSessionTitleEditing, 0); // Đảm bảo hàm này được gọi sau khi DOM đã được cập nhật
+            setTimeout(setupSessionTitleEditing, 0);
         } catch (error) {
             console.error('Error refreshing chat sessions:', error);
         }

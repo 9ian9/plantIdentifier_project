@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let chatStarted = false;
 
     sendButton.addEventListener('click', sendMessage);
-    attachButton.addEventListener('click', () => imageUpload.click());
+    // attachButton.addEventListener('click', () => imageUpload.click());
     inputArea.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             sendMessage();

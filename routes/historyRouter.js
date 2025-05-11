@@ -39,4 +39,21 @@ router.put('/session/:sessionId/title', async(req, res) => {
     }
 });
 
+// Xóa một phiên chat
+router.delete('/session/:sessionId', async(req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const result = await ChatSession.deleteOne({ sessionId });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error deleting session:', error);
+        res.status(500).json({ error: 'Failed to delete session' });
+    }
+});
+
 module.exports = router;

@@ -329,3 +329,35 @@ body {
     font-style: italic;
     padding: 10px;
 }
+
+
+/* Preview image in input-area */
+
+#imagePreviewContainer {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+}
+
+#imagePreview {
+    max-width: 60px;
+    max-height: 60px;
+    border-radius: 8px;
+    margin-right: 4px;
+}
+
+#removePreviewBtn {
+    margin-left: 4px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
