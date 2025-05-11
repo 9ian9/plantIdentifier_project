@@ -296,18 +296,11 @@ body {
     margin-bottom: 3px;
 }
 
-.title-edit {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 0 5px;
+.session-title .title-edit {
+    width: 90%;
+    font-size: 1em;
+    padding: 2px 4px;
     box-sizing: border-box;
-    font-size: inherit;
-    font-family: inherit;
 }
 
 .session-preview {
@@ -360,4 +353,25 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.mic-btn {
+    background-color: #fffbe6;
+    color: #d2691e;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.mic-btn.active {
+    background-color: #ffe066;
+    color: #ff5722;
 }

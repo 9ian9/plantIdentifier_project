@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style.css">
     <script src="/script.js" defer></script>
     <script src="/js/chat.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -24,7 +25,9 @@
                                 <li class="chat-session" data-session-id="<%= session.sessionId %>">
                                     <div class="session-title">
                                         <div class="title-text">
-                                            <%= session.title || 'New Chat' %>
+                                            <span class="title-text">
+                                                <%= session.title || 'New Chat' %>
+                                            </span>
                                         </div>
                                         <input type="text" class="title-edit" value="<%= session.title || 'New Chat' %>" style="display: none;">
                                     </div>
@@ -84,7 +87,8 @@
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <input type="text" id="messageInput" placeholder="Ask about a plant or upload an image..." style="flex: 1;">
                     <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                    <button class="attach-btn" id="attachBtn">📎</button>
+                    <button class="attach-btn" id="attachBtn"><i class="fa-solid fa-paperclip"></i></button>
+                    <button class="mic-btn" id="micBtn" title="Speak"><i class="fa-solid fa-microphone"></i></button>
                     <button class="send-btn">➤</button>
                 </div>
             </div>
@@ -143,6 +147,8 @@
                             const file = imageInput.files[0];
                             const formData = new FormData();
                             formData.append('image', file);
+                            // Nếu có sessionId, thêm vào formData
+                            // formData.append('sessionId', currentSessionId);
 
                             fetch('/upload', {
                                     method: 'POST',
@@ -151,13 +157,17 @@
                                 .then(res => res.json())
                                 .then(data => {
                                     if (data.status === 'success') {
-                                        // Thêm các message vào chat history
-                                        data.data.messages.forEach(message => {
-                                            chatHistory.insertAdjacentHTML('beforeend', message.html);
-                                        });
+                                        // Hiển thị ảnh trong chat
+                                        const imgMsg = document.createElement('div');
+                                        imgMsg.className = 'user-message';
+                                        imgMsg.innerHTML = `<img src="${data.data.imageUrl}" style="max-width:150px; border-radius:8px;"/>`;
+                                        chatHistory.appendChild(imgMsg);
 
-                                        // Cuộn xuống tin nhắn mới nhất
-                                        chatHistory.scrollTop = chatHistory.scrollHeight;
+                                        // Hiển thị phản hồi bot
+                                        const botMsg = document.createElement('div');
+                                        botMsg.className = 'bot-message';
+                                        botMsg.textContent = data.data.botResponse;
+                                        chatHistory.appendChild(botMsg);
 
                                         // Xoá preview và reset input
                                         previewImg.src = '';
@@ -167,10 +177,7 @@
                                         alert(data.message || 'Upload failed');
                                     }
                                 })
-                                .catch(error => {
-                                    console.error('Upload error:', error);
-                                    alert('Upload error!');
-                                });
+                                .catch(() => alert('Upload error!'));
                         } else if (messageInput.value.trim() !== '') {
                             // Xử lý gửi text như hiện tại (nếu muốn)
                         }

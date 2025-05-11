@@ -54,7 +54,7 @@ exports.handleUpload = async(req, res) => {
         }
 
         // Thêm message mới vào session
-        const userMessage = {
+        chatSession.messages.push({
             role: 'user',
             content: '[Image Upload]',
             image: imageUrl,
@@ -63,36 +63,29 @@ exports.handleUpload = async(req, res) => {
             fileName: req.file.originalname,
             fileSize: req.file.size,
             fileType: mimeType
-        };
+        });
 
-        const botMessage = {
+        // Thêm phản hồi của bot
+        chatSession.messages.push({
             role: 'assistant',
             content: botResponse,
             timestamp: new Date()
-        };
+        });
 
-        chatSession.messages.push(userMessage, botMessage);
         await chatSession.save();
 
-        // Return success response with HTML for both messages
+        // Return success response with details
         res.json({
             status: 'success',
             message: 'Image uploaded successfully',
             data: {
                 sessionId: chatSession.sessionId,
-                messages: [{
-                        type: 'user',
-                        html: `<div class="user-message">
-                                <img src="${imageUrl}" style="max-width:150px; border-radius:8px;"/>
-                              </div>`
-                    },
-                    {
-                        type: 'bot',
-                        html: `<div class="bot-message">
-                                ${botResponse}
-                              </div>`
-                    }
-                ]
+                imageUrl: imageUrl,
+                fileName: req.file.originalname,
+                fileSize: req.file.size,
+                fileType: mimeType,
+                uploadDate: new Date(),
+                botResponse: botResponse
             }
         });
     } catch (error) {
