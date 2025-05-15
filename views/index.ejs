@@ -12,6 +12,9 @@
 
 <body>
     <div class="container">
+        <button id="toggleSidebarBtn" class="toggle-sidebar-btn" title="Ẩn/hiện menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
         <div class="sidebar">
             <h1>🌿 Plant Identifier</h1>
             <button class="new-chat" id="newChatBtn">New Chat</button>
@@ -24,14 +27,11 @@
                             <% chatSessions.forEach(session=> { %>
                                 <li class="chat-session" data-session-id="<%= session.sessionId %>">
                                     <div class="session-title">
-                                        <div class="title-text">
-                                            <span class="title-text">
-                                                <%= session.title || 'New Chat' %>
-                                            </span>
-                                        </div>
+                                        <span class="title-text">
+                                            <%= session.title || 'New Chat' %>
+                                        </span>
                                         <input type="text" class="title-edit" value="<%= session.title || 'New Chat' %>" style="display: none;">
                                     </div>
-
                                     <div class="session-preview">
                                         <%= session.messages[0]?.content.substring(0, 30) +
                                             (session.messages[0]?.content.length> 30 ? '...' : '') %>
@@ -39,6 +39,8 @@
                                     <div class="session-date">
                                         <%= new Date(session.updatedAt).toLocaleString() %>
                                     </div>
+                                    <button class="delete-session-btn" title="Delete chat"><i
+                                            class="fa-solid fa-trash"></i></button>
                                 </li>
                                 <% }); %>
                                     <% } else { %>

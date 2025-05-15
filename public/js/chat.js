@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
     const askQuestionBtn = document.getElementById('askQuestionBtn');
     const micBtn = document.getElementById('micBtn');
+    const sidebar = document.querySelector('.sidebar');
+    const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
     let currentSessionId = null;
 
     // Load nội dung chat khi click vào một phiên
@@ -43,8 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (msg.content) {
-                    const textNode = document.createTextNode(msg.content);
-                    bubble.appendChild(textNode);
+                    if (msg.role === 'assistant') {
+                        bubble.innerHTML = renderStructuredResponse(msg.content);
+                    } else {
+                        bubble.textContent = msg.content;
+                    }
                 }
 
                 chatHistory.appendChild(bubble);
@@ -271,5 +276,26 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (micBtn) {
         micBtn.disabled = true;
         micBtn.title = "Speech recognition not supported in this browser";
+    }
+
+    if (sidebar && toggleSidebarBtn) {
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('closed');
+        });
+    }
+
+    // Ẩn welcomeArea khi gửi tin nhắn
+    const sendBtn = document.querySelector('.send-btn');
+    if (sendBtn) {
+        sendBtn.addEventListener('click', () => {
+            if (welcomeArea) welcomeArea.style.display = 'none';
+        });
+    }
+    if (messageInput) {
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                if (welcomeArea) welcomeArea.style.display = 'none';
+            }
+        });
     }
 });

@@ -9,10 +9,15 @@ body {
 .container {
     display: flex;
     flex: 1;
+    position: relative;
 }
 
 .sidebar {
     width: 20%;
+    min-width: 220px;
+    max-width: 320px;
+    transition: transform 0.3s, width 0.3s;
+    z-index: 10;
     background-color: #eaf7ee;
     padding: 20px;
 }
@@ -55,6 +60,7 @@ body {
     /* Kéo giãn các phần tử con theo chiều ngang */
     padding: 0;
     /* Loại bỏ padding mặc định của main-content */
+    transition: margin-left 0.3s;
 }
 
 .welcome-area {
@@ -280,6 +286,9 @@ body {
 }
 
 .chat-session {
+    display: flex;
+    flex-direction: column;
+    position: relative;
     padding: 10px;
     margin: 5px 0;
     border-radius: 8px;
@@ -374,4 +383,66 @@ body {
 .mic-btn.active {
     background-color: #ffe066;
     color: #ff5722;
+}
+
+.delete-session-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: none;
+    border: none;
+    color: #d9534f;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+    z-index: 2;
+}
+
+.delete-session-btn:hover {
+    color: #b52a1d;
+}
+
+.toggle-sidebar-btn {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 20;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    margin-bottom: 10px;
+    color: #006400;
+    display: block;
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+@media (max-width: 800px) {
+    .sidebar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 70vw;
+        min-width: 220px;
+        max-width: 320px;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+    }
+    .sidebar.closed {
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+    }
+    .main-content {
+        margin-left: 0 !important;
+    }
 }
