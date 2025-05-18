@@ -3,23 +3,45 @@ const multer = require('multer');
 const path = require('path');
 const app = express();
 const port = 3000;
-app.use(express.json());
+
+// Import middleware
+const errorHandler = require('./middlewares/errorHandler');
+
+// Cấu hình multer cho upload file
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    }
+});
+
+// Cấu hình middleware
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+app.use(express.static('public'));
+
+// Cấu hình view engine
+app.set('view engine', 'ejs');
+
+// Import routes và controllers
 const chatRouter = require('./routes/chatRouter');
+const chatController = require('./controllers/chatController');
+const chatHistoryRouter = require('./routes/historyRouter');
+const uploadController = require('./controllers/uploadController');
 const connectDB = require('./config/database');
 const { PORT } = require('./config/constants');
 const mongoose = require('mongoose');
 
-// Cấu hình cơ bản
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
-// app.use(express.json());
+// Định nghĩa routes
 app.use('/chat', chatRouter);
-// Routes tạm thời
-app.get('/', (req, res) => {
-    res.render('index', { uploadedImage: null });
-});
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use('/chat/history', chatHistoryRouter);
+app.post('/upload', upload.single('image'), uploadController.handleUpload);
+app.get('/', chatController.renderIndex);
+
+// Error handling middleware (phải đặt sau tất cả các routes)
+app.use(errorHandler);
+
 (async() => {
     try {
         await connectDB();

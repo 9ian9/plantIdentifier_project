@@ -6,61 +6,98 @@
     <title>Plant Identifier</title>
     <link rel="stylesheet" href="/style.css">
     <script src="/script.js" defer></script>
+    <script src="/js/chat.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <div class="container">
+        <button id="toggleSidebarBtn" class="toggle-sidebar-btn" title="Ẩn/hiện menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
         <div class="sidebar">
             <h1>🌿 Plant Identifier</h1>
-            <button class="new-chat">New Chat</button>
+            <button class="new-chat" id="newChatBtn">New Chat</button>
             <div class="recent-chats">
                 <p>Recent Chats</p>
-                <ul>
-                    <li>Garden Roses</li>
-                    <li>Unknown Houseplant</li>
-                    <li>Backyard Weed</li>
-                </ul>
+                <div class="chat-sessions-container">
+                    <ul id="chatSessionsList">
+                        <!-- Các phiên chat sẽ được load động ở đây -->
+                        <% if (chatSessions && chatSessions.length> 0) { %>
+                            <% chatSessions.forEach(session=> { %>
+                                <li class="chat-session" data-session-id="<%= session.sessionId %>">
+                                    <div class="session-title">
+                                        <span class="title-text">
+                                            <%= session.title || 'New Chat' %>
+                                        </span>
+                                        <input type="text" class="title-edit" value="<%= session.title || 'New Chat' %>" style="display: none;">
+                                    </div>
+                                    <div class="session-preview">
+                                        <%= session.messages[0]?.content.substring(0, 30) +
+                                            (session.messages[0]?.content.length> 30 ? '...' : '') %>
+                                    </div>
+                                    <div class="session-date">
+                                        <%= new Date(session.updatedAt).toLocaleString() %>
+                                    </div>
+                                    <button class="delete-session-btn" title="Delete chat"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </li>
+                                <% }); %>
+                                    <% } else { %>
+                                        <li class="no-sessions">No recent chats</li>
+                                        <% } %>
+                    </ul>
+                </div>
+
             </div>
         </div>
 
         <div class="main-content">
             <div class="chat-header">
                 <div class="header-icon">🌿</div>
-                <div class="header-text">Plant Identifier Chat</div>
+                <div class="header-text" id="chatTitle">Plant Identifier Chat</div>
             </div>
 
-            <div class="chat-history">
+            <div class="chat-history" id="chatHistory">
+                <!-- Nội dung chat sẽ được load động ở đây -->
             </div>
 
-
-
-            <div class="welcome-area">
+            <div class="welcome-area" id="welcomeArea">
                 <div class="leaf-icon">🌿</div>
                 <h2>Welcome to Plant Identifier</h2>
                 <p>Upload a photo or ask a question about any plant you want to identify.</p>
                 <div class="action-buttons">
-                    <button class="upload-photo-btn">
+                    <button class="upload-photo-btn" id="uploadPhotoBtn">
                         <span>Upload a photo</span>
                         <span>Upload a clear image of the plant you want to identify</span>
                     </button>
-                    <button class="ask-question-btn">
+                    <button class="ask-question-btn" id="askQuestionBtn">
                         <span>Ask a question</span>
                         <span>Ask about plant care, species information, or growing tips</span>
                     </button>
                 </div>
             </div>
-            <div class="input-area">
-                <input type="text" placeholder="Ask about a plant or upload an image...">
-                <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                <button class="attach-btn">📎</button>
-                <button class="send-btn">➤</button>
+
+            <div class="input-area" style="display: flex; flex-direction: column;">
+                <!-- Image preview inside input-area -->
+                <div id="imagePreviewContainer" style="display:none; margin-bottom: 6px; position: relative; width: fit-content;">
+                    <img id="imagePreview" src="" alt="Image Preview" style="max-width: 120px; border-radius: 8px;" />
+                    <button id="removePreviewBtn" style="position: absolute; top: -6px; right: -6px; background: #fff; border: none; cursor: pointer;">✖</button>
+                </div>
+
+                <!-- Input row -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="text" id="messageInput" placeholder="Ask about a plant or upload an image..." style="flex: 1;">
+                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                    <button class="attach-btn" id="attachBtn"><i class="fa-solid fa-paperclip"></i></button>
+                    <button class="mic-btn" id="micBtn" title="Speak"><i class="fa-solid fa-microphone"></i></button>
+                    <button class="send-btn">➤</button>
+                </div>
             </div>
+
+
         </div>
     </div>
-    <form action="/upload" method="POST" enctype="multipart/form-data" style="display: none;">
-        <input type="file" name="plantImage" accept="image/*" required>
-        <button type="submit">Upload</button>
-    </form>
 
     <% if (uploadedImage) { %>
         <div>
@@ -69,6 +106,86 @@
         </div>
         <% } %>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const imageInput = document.getElementById('image-upload');
+                    const previewContainer = document.getElementById('imagePreviewContainer');
+                    const previewImg = document.getElementById('imagePreview');
+                    const removeBtn = document.getElementById('removePreviewBtn');
+                    const attachBtn = document.querySelector('.attach-btn');
+                    const sendBtn = document.querySelector('.send-btn');
+                    const messageInput = document.getElementById('messageInput');
+                    const chatHistory = document.getElementById('chatHistory');
+
+                    // Khi nhấn nút đính kèm thì mở chọn file
+                    attachBtn.addEventListener('click', () => {
+                        imageInput.click();
+                    });
+
+                    // Khi chọn file thì hiển thị preview
+                    imageInput.addEventListener('change', function() {
+                        const file = this.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                previewImg.src = e.target.result;
+                                previewContainer.style.display = 'block';
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    // Xoá preview
+                    removeBtn.addEventListener('click', function() {
+                        previewImg.src = '';
+                        previewContainer.style.display = 'none';
+                        imageInput.value = '';
+                    });
+
+                    // Xử lý gửi ảnh khi nhấn nút gửi
+                    sendBtn.addEventListener('click', function() {
+                        // Nếu có ảnh preview thì gửi ảnh
+                        if (imageInput.files.length > 0) {
+                            const file = imageInput.files[0];
+                            const formData = new FormData();
+                            formData.append('image', file);
+                            // Nếu có sessionId, thêm vào formData
+                            // formData.append('sessionId', currentSessionId);
+
+                            fetch('/upload', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.status === 'success') {
+                                        // Hiển thị ảnh trong chat
+                                        const imgMsg = document.createElement('div');
+                                        imgMsg.className = 'user-message';
+                                        imgMsg.innerHTML = `<img src="${data.data.imageUrl}" style="max-width:150px; border-radius:8px;"/>`;
+                                        chatHistory.appendChild(imgMsg);
+
+                                        // Hiển thị phản hồi bot
+                                        const botMsg = document.createElement('div');
+                                        botMsg.className = 'bot-message';
+                                        botMsg.textContent = data.data.botResponse;
+                                        chatHistory.appendChild(botMsg);
+
+                                        // Xoá preview và reset input
+                                        previewImg.src = '';
+                                        previewContainer.style.display = 'none';
+                                        imageInput.value = '';
+                                    } else {
+                                        alert(data.message || 'Upload failed');
+                                    }
+                                })
+                                .catch(() => alert('Upload error!'));
+                        } else if (messageInput.value.trim() !== '') {
+                            // Xử lý gửi text như hiện tại (nếu muốn)
+                        }
+                    });
+                });
+            </script>
 </body>
 
 </html>

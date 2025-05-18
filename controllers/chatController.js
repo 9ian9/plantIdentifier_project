@@ -1,68 +1,152 @@
-const ChatHistory = require('../models/ChatHistory');
+const ChatSession = require('../models/ChatHistory');
 const chatService = require('../services/chatService');
 const logger = require('../utils/logger');
-const { setTimeout } = require('timers/promises');
+const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
-async function saveChatHistory(message, response, image) {
-    const maxRetries = 3;
-    let attempt = 0;
+// Tạo hoặc cập nhật phiên chat
+// Trong chatController.js
+async function updateChatSession(sessionId, role, content, image = null) {
+    try {
+        const messageContent = {
+            role,
+            content,
+            image: image ? `data:image/jpeg;base64,${image}` : undefined
+        };
 
-    while (attempt < maxRetries) {
-        try {
-            const chatRecord = new ChatHistory({
-                message: message || '[Image only]',
-                response: response,
-                image: image || undefined
+        if (!sessionId) {
+            // Tạo phiên mới
+            const newSessionId = uuidv4();
+            const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+
+            await ChatSession.create({
+                sessionId: newSessionId,
+                messages: [messageContent],
+                title: title
             });
 
-            await chatRecord.save();
-            logger.info('Chat history saved successfully');
-            return true;
-        } catch (error) {
-            attempt++;
-            logger.warn(`Attempt ${attempt} failed to save chat history. ${error.message}`);
-
-            if (attempt === maxRetries) {
-                logger.error(`Failed to save after ${maxRetries} attempts:`, error);
-                return false;
-            }
-
-            // Chờ trước khi thử lại
-            await setTimeout(1000 * attempt);
+            return newSessionId;
+        } else {
+            // Cập nhật phiên hiện có
+            await ChatSession.findOneAndUpdate({ sessionId }, {
+                $push: { messages: messageContent },
+                $set: { updatedAt: new Date() }
+            }, { new: true });
+            return sessionId;
         }
+    } catch (error) {
+        logger.error('Error updating chat session:', error);
+        throw error;
     }
 }
 
 exports.handleChat = [
-    upload.single('image'), // Xử lý upload ảnh
+    upload.single('image'),
     async(req, res) => {
         try {
-            const { message } = req.body;
+            // Nhận cả message gốc và message đã ghép entity
+            const { message, userMessage, sessionId } = req.body;
             let imageBase64 = '';
 
-            // Xử lý ảnh nếu có
             if (req.file) {
                 imageBase64 = req.file.buffer.toString('base64');
             }
 
-            // Xử lý tin nhắn và tạo phản hồi
-            const response = await chatService.processMessage(message || '[Image]');
+            // Xử lý tin nhắn: dùng message đã ghép entity để xử lý intent, truyền thêm userMessage (message gốc)
+            const nlpResult = await chatService.processMessage(message || '[Image]', userMessage);
+            const response = nlpResult && nlpResult.response ? nlpResult.response : nlpResult;
 
-            // Lưu vào database
-            const chatRecord = new ChatHistory({
-                message: message || '[Image Upload]',
-                response: response,
-                image: req.file ? `data:${req.file.mimetype};base64,${imageBase64}` : undefined
+            // Lưu tin nhắn người dùng: chỉ lưu message gốc (userMessage), fallback sang message nếu không có
+            const newSessionId = await updateChatSession(
+                sessionId,
+                'user',
+                userMessage || message || '[Image Upload]',
+                imageBase64
+            );
+
+            // Lưu phản hồi của bot
+            await updateChatSession(
+                newSessionId,
+                'assistant',
+                response
+            );
+
+            res.json({
+                response,
+                sessionId: newSessionId,
+                entity: nlpResult && nlpResult.entity ? nlpResult.entity : null
             });
-
-            await chatRecord.save();
-
-            res.json({ response });
         } catch (error) {
             console.error('Error:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }
 ];
+
+// Lấy lịch sử chat theo phiên
+exports.getChatHistory = async(req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const session = await ChatSession.findOne({ sessionId });
+
+        if (!session) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        res.json(session);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch chat history' });
+    }
+};
+// Thêm vào chatController.js
+exports.renderIndex = async(req, res) => {
+    try {
+        const sessions = await ChatSession.find()
+            .sort({ updatedAt: -1 })
+            .limit(10)
+            .select('sessionId messages updatedAt');
+
+        res.render('index', {
+            chatSessions: sessions,
+            uploadedImage: req.query.uploadedImage || null
+        });
+    } catch (error) {
+        console.error('Error rendering index:', error);
+        res.render('index', {
+            chatSessions: [],
+            uploadedImage: req.query.uploadedImage || null
+        });
+    }
+};
+// Trong file chatController.js
+exports.getChatSessions = async(req, res) => {
+    try {
+        const sessions = await ChatSession.find()
+            .sort({ updatedAt: -1 })
+            .limit(10)
+            .select('sessionId title messages updatedAt');
+
+        res.json(sessions);
+    } catch (error) {
+        console.error('Error fetching chat sessions:', error);
+        res.status(500).json({ error: 'Failed to fetch chat sessions' });
+    }
+};
+
+exports.getChatSession = async(req, res) => {
+    try {
+        const session = await ChatSession.findOne({
+            sessionId: req.params.sessionId
+        });
+
+        if (!session) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        res.json(session);
+    } catch (error) {
+        console.error('Error fetching chat session:', error);
+        res.status(500).json({ error: 'Failed to fetch chat session' });
+    }
+};
