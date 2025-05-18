@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const askQuestionBtn = document.getElementById('askQuestionBtn');
     const micBtn = document.getElementById('micBtn');
     const sidebar = document.querySelector('.sidebar');
+    const btnDeleteSession = document.querySelector('.delete-session-btn');
     const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
     let currentSessionId = null;
 
@@ -173,41 +174,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Network response was not ok');
             }
             const sessions = await response.json();
-
             const chatSessionsList = document.getElementById('chatSessionsList');
+            chatSessionsList.innerHTML = ''; // Xóa các session cũ
+
             if (sessions.length > 0) {
-                chatSessionsList.innerHTML = sessions.map(session => `
-                    <li class="chat-session" data-session-id="${session.sessionId}">
-                        <div class="session-title">
-                            <div class="title-text">${session.title || 'New Chat'}</div>
-                            <input type="text" class="title-edit" value="${session.title || 'New Chat'}" style="display: none;">
-                            <button class="delete-session-btn" title="Delete chat">🗑️</button>
-                        </div>
-                        <div class="session-preview">
-                            ${session.messages[0]?.content?.substring(0, 30) || ''}${session.messages[0]?.content?.length > 30 ? '...' : ''}
-                        </div>
-                        <div class="session-date">
-                            ${new Date(session.updatedAt).toLocaleString()}
-                        </div>
-                    </li>
-                `).join('');
+                sessions.forEach(session => {
+                    const li = document.createElement('li');
+                    li.className = 'chat-session';
+                    li.dataset.sessionId = session.sessionId;
 
-                // Thêm event listener cho nút xóa
-                document.querySelectorAll('.delete-session-btn').forEach(btn => {
-                    btn.addEventListener('click', async(e) => {
-                        e.stopPropagation(); // Ngăn chặn sự kiện click lan ra session
-                        const sessionItem = btn.closest('.chat-session');
-                        const sessionId = sessionItem.dataset.sessionId;
+                    li.innerHTML = `
+                    <div class="session-title">
+                        <span class="title-text">${session.title || 'New Chat'}</span>
+                        <input type="text" class="title-edit" value="${session.title || 'New Chat'}" style="display: none;">
+                    </div>
+                    <div class="session-preview">
+                        ${(session.messages[0]?.content || '').substring(0, 30)}${(session.messages[0]?.content?.length > 30 ? '...' : '')}
+                    </div>
+                    <div class="session-date">
+                        ${new Date(session.updatedAt).toLocaleString()}
+                    </div>
+                    <button class="delete-session-btn" title="Delete chat">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
 
+                    // Xử lý xóa phiên chat
+                    li.querySelector('.delete-session-btn').addEventListener('click', async(e) => {
+                        e.stopPropagation();
+                        const sessionId = li.dataset.sessionId;
                         if (confirm('Are you sure you want to delete this chat?')) {
                             try {
-                                const response = await fetch(`/chat/history/session/${sessionId}`, {
+                                const res = await fetch(`/chat/history/session/${sessionId}`, {
                                     method: 'DELETE'
                                 });
-
-                                if (response.ok) {
-                                    sessionItem.remove();
-                                    // Nếu đang xem session bị xóa, reset về màn hình chào
+                                if (res.ok) {
+                                    li.remove();
                                     if (currentSessionId === sessionId) {
                                         currentSessionId = null;
                                         chatHistory.innerHTML = '';
@@ -221,20 +223,25 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         }
                     });
+
+                    chatSessionsList.appendChild(li);
                 });
             } else {
                 chatSessionsList.innerHTML = '<li class="no-sessions">No recent chats</li>';
             }
+
+            // Thiết lập chỉnh sửa tiêu đề
             setTimeout(setupSessionTitleEditing, 0);
         } catch (error) {
             console.error('Error refreshing chat sessions:', error);
         }
     }
 
-    // Gọi lần đầu khi trang load
+    // Gọi khi load trang
     (async function init() {
         await refreshChatSessions();
     })();
+
 
     // Speech-to-text cho nút mic
     if (micBtn && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
