@@ -8,6 +8,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageUpload = document.getElementById('image-upload');
     let chatStarted = false;
 
+    // Danh sách entity mẫu lấy từ intents.js
+    const PLANT_ENTITIES = [
+        'đậu phộng', 'vải', 'dưa hấu', 'bơ', 'táo', 'cà phê', 'keo', 'mít', 'đu đủ',
+        'dưa leo', 'xoài', 'chuối', 'mận', 'dừa', 'cà chua', 'nha đam', 'trà', 'sắn',
+        'mãng cầu', 'ớt', 'tiêu', 'lúa'
+    ];
+
+    function setCurrentTopic(topic) {
+        localStorage.setItem('currentTopic', topic);
+    }
+
+    function getCurrentTopic() {
+        return localStorage.getItem('currentTopic') || '';
+    }
+
     sendButton.addEventListener('click', sendMessage);
     // attachButton.addEventListener('click', () => imageUpload.click());
     inputArea.addEventListener('keypress', (event) => {
@@ -18,21 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentSessionId = null;
     async function sendMessage() {
-        const message = inputArea.value.trim();
+        console.log('Đã click gửi tin nhắn');
+        let userMessage = inputArea.value.trim(); // message gốc của user
+        let messageToSend = userMessage; // message sẽ gửi lên server
+        const currentTopic = getCurrentTopic();
+        const containsAnyEntity = PLANT_ENTITIES.some(entity =>
+            userMessage.toLowerCase().includes(entity)
+        );
+        if (currentTopic && !containsAnyEntity) {
+            messageToSend = userMessage + ' ' + currentTopic;
+        }
+        console.log('Message gửi lên server:', messageToSend);
         const hasImage = imageUpload.files && imageUpload.files.length > 0;
 
-        if (message || hasImage) {
+        if (userMessage || hasImage) {
             if (!chatStarted) {
                 welcomeArea.style.display = 'none';
                 chatStarted = true;
                 currentSessionId = null; // Reset session khi bắt đầu chat mới
             }
 
-            // Hiển thị tin nhắn của người dùng
-            if (message) {
+            // Hiển thị đúng message gốc của user
+            if (userMessage) {
                 const userBubble = document.createElement('div');
                 userBubble.classList.add('user-message');
-                userBubble.textContent = message;
+                userBubble.textContent = userMessage;
                 chatHistory.appendChild(userBubble);
             }
 
@@ -59,20 +84,25 @@ document.addEventListener('DOMContentLoaded', () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        message: message,
+                        message: messageToSend, // message đã ghép entity
+                        userMessage: userMessage, // message gốc
                         image: imageBase64,
                         sessionId: currentSessionId // Gửi sessionId hiện tại (nếu có)
                     }),
                 });
 
                 const data = await response.json();
+                console.log('Entity nhận về từ server:', data.entity);
+                console.log('Bot response nhận về:', data.response);
+                if (data.entity) {
+                    setCurrentTopic(data.entity);
+                }
                 currentSessionId = data.sessionId; // Cập nhật sessionId
 
-                // Hiển thị phản hồi của bot
+                // Luôn hiển thị phản hồi bot, kể cả khi response là chuỗi ngắn
                 const botBubble = document.createElement('div');
                 botBubble.classList.add('bot-message');
-                // Kiểm tra nếu response có nhiều mục và có dấu :
-                botBubble.innerHTML = renderStructuredResponse(data.response);
+                botBubble.innerHTML = renderStructuredResponse(data.response || '');
                 chatHistory.appendChild(botBubble);
                 scrollToBottom();
             } catch (error) {

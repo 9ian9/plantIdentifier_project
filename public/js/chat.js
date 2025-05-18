@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatHistory.innerHTML = '';
         welcomeArea.style.display = 'flex';
         messageInput.value = '';
+        window.location.reload();
     });
 
     // Focus vào input khi click nút hỏi
@@ -287,15 +288,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ẩn welcomeArea khi gửi tin nhắn
     const sendBtn = document.querySelector('.send-btn');
     if (sendBtn) {
-        sendBtn.addEventListener('click', () => {
+        sendBtn.addEventListener('click', async() => {
             if (welcomeArea) welcomeArea.style.display = 'none';
+            let message = messageInput.value.trim();
+            const currentTopic = getCurrentTopic();
+            if (currentTopic && !message.toLowerCase().includes(currentTopic.toLowerCase())) {
+                message = message + ' ' + currentTopic;
+            }
+            console.log('Message gửi lên server from chat.js:', message); // Log message thực tế gửi đi
+            // Gửi message này lên server
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message, sessionId: currentSessionId })
+            });
+            const data = await response.json();
+            console.log('Entity nhận về từ server from chat.js:', data.entity); // Log entity nhận về
+            // Nếu server trả về entity, lưu lại vào localStorage
+            if (data.entity) {
+                setCurrentTopic(data.entity);
+            }
+            // ... Hiển thị tin nhắn như cũ ...
         });
     }
+
     if (messageInput) {
         messageInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 if (welcomeArea) welcomeArea.style.display = 'none';
             }
         });
+    }
+
+    // Hàm lưu và lấy topic từ localStorage
+    function setCurrentTopic(topic) {
+        localStorage.setItem('currentTopic', topic);
+    }
+
+    function getCurrentTopic() {
+        return localStorage.getItem('currentTopic') || '';
     }
 });

@@ -45,21 +45,23 @@ exports.handleChat = [
     upload.single('image'),
     async(req, res) => {
         try {
-            const { message, sessionId } = req.body;
+            // Nhận cả message gốc và message đã ghép entity
+            const { message, userMessage, sessionId } = req.body;
             let imageBase64 = '';
 
             if (req.file) {
                 imageBase64 = req.file.buffer.toString('base64');
             }
 
-            // Xử lý tin nhắn
-            const response = await chatService.processMessage(message || '[Image]');
+            // Xử lý tin nhắn: dùng message đã ghép entity để xử lý intent, truyền thêm userMessage (message gốc)
+            const nlpResult = await chatService.processMessage(message || '[Image]', userMessage);
+            const response = nlpResult && nlpResult.response ? nlpResult.response : nlpResult;
 
-            // Lưu tin nhắn người dùng
+            // Lưu tin nhắn người dùng: chỉ lưu message gốc (userMessage), fallback sang message nếu không có
             const newSessionId = await updateChatSession(
                 sessionId,
                 'user',
-                message || '[Image Upload]',
+                userMessage || message || '[Image Upload]',
                 imageBase64
             );
 
@@ -72,7 +74,8 @@ exports.handleChat = [
 
             res.json({
                 response,
-                sessionId: newSessionId
+                sessionId: newSessionId,
+                entity: nlpResult && nlpResult.entity ? nlpResult.entity : null
             });
         } catch (error) {
             console.error('Error:', error);
