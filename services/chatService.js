@@ -27,7 +27,7 @@ class ChatService {
         try {
             // Nếu có rawUserMessage (message gốc), dùng để tách mục nhỏ
             const keyword = rawUserMessage || '';
-            console.log('[DEBUG] userMessage:', userMessage, '| rawUserMessage:', rawUserMessage, '| keyword:', keyword);
+            // console.log('[DEBUG] userMessage:', userMessage, '| rawUserMessage:', rawUserMessage, '| keyword:', keyword);
             const intentResult = nlpService.findBestIntent(userMessage);
 
             if (!intentResult) {
@@ -78,12 +78,12 @@ class ChatService {
                 for (const section of smallSections) {
                     if (lowerKeyword.includes(section)) {
                         const extracted = extractSection(response, section);
-                        console.log('[DEBUG] extractSection:', section, '| extracted:', extracted);
+                        // console.log('[DEBUG] extractSection:', section, '| extracted:', extracted);
                         return { response: extracted, entity: intentResult.entity || null };
                     }
                 }
             }
-            console.log('[DEBUG] response trả về:', response);
+            // console.log('[DEBUG] response trả về:', response);
             return { response, entity: intentResult.entity || null };
         } catch (error) {
             console.error('Error in processMessage:', error);

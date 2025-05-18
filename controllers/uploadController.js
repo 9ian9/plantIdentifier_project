@@ -1,9 +1,11 @@
 const ChatSession = require('../models/ChatHistory');
 const { v4: uuidv4 } = require('uuid');
+const { predictPlant } = require('../services/plantRecognitionService');
+
+const classNames = ['acacia_images', 'aloe_vera_images', 'annona_images', 'apple_images', 'avocado_images', 'banana_images', 'carica_papaya_images', 'cassava_images', 'chili_images', 'coconut_images', 'coffee_images', 'cucumber_images', 'jackfruit_images', 'litchi_images', 'mango_images', 'peanut_images', 'plum_images', 'tea_images', 'tomato_images', 'watermelon_images']; // điền tên lớp của bạn ở đây
 
 exports.handleUpload = async(req, res) => {
     try {
-        // Validate file existence
         if (!req.file) {
             return res.status(400).json({
                 status: 'error',
@@ -11,7 +13,6 @@ exports.handleUpload = async(req, res) => {
             });
         }
 
-        // Validate file type
         const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         if (!allowedMimeTypes.includes(req.file.mimetype)) {
             return res.status(400).json({
@@ -20,8 +21,7 @@ exports.handleUpload = async(req, res) => {
             });
         }
 
-        // Validate file size (max 5MB)
-        const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        const maxSize = 5 * 1024 * 1024;
         if (req.file.size > maxSize) {
             return res.status(400).json({
                 status: 'error',
@@ -29,21 +29,21 @@ exports.handleUpload = async(req, res) => {
             });
         }
 
-        // Convert image to base64
+        // Chạy dự đoán cây trên ảnh upload
+        const plantClassIndex = await predictPlant(req.file.buffer, req.onnxSession);
+        const plantName = classNames[plantClassIndex] || 'Unknown';
+
         const imageBase64 = req.file.buffer.toString('base64');
         const mimeType = req.file.mimetype;
         const imageUrl = `data:${mimeType};base64,${imageBase64}`;
 
-        // Tạo phản hồi từ chatbot
-        const botResponse = "Tôi đã nhận được hình ảnh của bạn. Trong tương lai, tôi sẽ được huấn luyện để nhận diện và phân tích hình ảnh này. Hiện tại, tôi chỉ có thể xác nhận rằng hình ảnh đã được tải lên thành công.";
+        const botResponse = `Tôi đã nhận diện cây là: ${plantName}. Cảm ơn bạn đã gửi hình ảnh.`;
 
-        // Tạo session mới hoặc lấy session hiện tại
         let sessionId = req.body.sessionId;
         if (!sessionId) {
             sessionId = uuidv4();
         }
 
-        // Tìm hoặc tạo session mới
         let chatSession = await ChatSession.findOne({ sessionId });
         if (!chatSession) {
             chatSession = new ChatSession({
@@ -53,7 +53,6 @@ exports.handleUpload = async(req, res) => {
             });
         }
 
-        // Thêm message mới vào session
         chatSession.messages.push({
             role: 'user',
             content: '[Image Upload]',
@@ -65,7 +64,6 @@ exports.handleUpload = async(req, res) => {
             fileType: mimeType
         });
 
-        // Thêm phản hồi của bot
         chatSession.messages.push({
             role: 'assistant',
             content: botResponse,
@@ -74,18 +72,19 @@ exports.handleUpload = async(req, res) => {
 
         await chatSession.save();
 
-        // Return success response with details
         res.json({
             status: 'success',
-            message: 'Image uploaded successfully',
+            message: 'Image uploaded and plant recognized successfully',
             data: {
                 sessionId: chatSession.sessionId,
-                imageUrl: imageUrl,
+                imageUrl,
+                plantName,
+                plantClassIndex,
                 fileName: req.file.originalname,
                 fileSize: req.file.size,
                 fileType: mimeType,
                 uploadDate: new Date(),
-                botResponse: botResponse
+                botResponse
             }
         });
     } catch (error) {

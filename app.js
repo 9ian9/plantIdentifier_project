@@ -1,11 +1,27 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const ort = require('onnxruntime-node');
 const app = express();
 const port = 3000;
 
 // Import middleware
 const errorHandler = require('./middlewares/errorHandler');
+
+// Biến toàn cục lưu session ONNX
+let onnxSession = null;
+
+// Hàm khởi tạo model ONNX 1 lần khi server start
+async function initOnnx() {
+    try {
+        const modelPath = path.join(__dirname, 'models', 'plant_classifier.onnx');
+        onnxSession = await ort.InferenceSession.create(modelPath);
+        console.log('ONNX model loaded successfully');
+    } catch (err) {
+        console.error('Failed to load ONNX model', err);
+        process.exit(1);
+    }
+}
 
 // Cấu hình multer cho upload file
 const storage = multer.memoryStorage();
@@ -28,15 +44,21 @@ app.set('view engine', 'ejs');
 const chatRouter = require('./routes/chatRouter');
 const chatController = require('./controllers/chatController');
 const chatHistoryRouter = require('./routes/historyRouter');
-const uploadController = require('./controllers/uploadController');
+const uploadRouter = require('./routes/uploadRouter');
 const connectDB = require('./config/database');
 const { PORT } = require('./config/constants');
 const mongoose = require('mongoose');
 
+// Middleware để truyền onnxSession vào request
+app.use((req, res, next) => {
+    req.onnxSession = onnxSession;
+    next();
+});
+
 // Định nghĩa routes
 app.use('/chat', chatRouter);
 app.use('/chat/history', chatHistoryRouter);
-app.post('/upload', upload.single('image'), uploadController.handleUpload);
+app.use('/api/upload', uploadRouter);
 app.get('/', chatController.renderIndex);
 
 // Error handling middleware (phải đặt sau tất cả các routes)
@@ -44,6 +66,8 @@ app.use(errorHandler);
 
 (async() => {
     try {
+        // Khởi tạo model ONNX trước khi kết nối DB
+        await initOnnx();
         await connectDB();
 
         // Khởi động server sau khi kết nối DB thành công
