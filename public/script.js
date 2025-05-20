@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeArea = document.querySelector('.welcome-area');
     const imageUpload = document.getElementById('image-upload');
     let chatStarted = false;
+    let currentSessionId = null;
 
     // Danh sách entity mẫu lấy từ intents.js
     const PLANT_ENTITIES = [
@@ -23,92 +24,53 @@ document.addEventListener('DOMContentLoaded', () => {
         return localStorage.getItem('currentTopic') || '';
     }
 
-    sendButton.addEventListener('click', sendMessage);
-    // attachButton.addEventListener('click', () => imageUpload.click());
-    inputArea.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendMessage();
-        }
-    });
-
-    let currentSessionId = null;
-    async function sendMessage() {
-        console.log('Đã click gửi tin nhắn');
-        let userMessage = inputArea.value.trim(); // message gốc của user
-        let messageToSend = userMessage; // message sẽ gửi lên server
-        const currentTopic = getCurrentTopic();
-        const containsAnyEntity = PLANT_ENTITIES.some(entity =>
-            userMessage.toLowerCase().includes(entity)
-        );
-        if (currentTopic && !containsAnyEntity) {
-            messageToSend = userMessage + ' ' + currentTopic;
-        }
-        console.log('Message gửi lên server:', messageToSend);
-        const hasImage = imageUpload.files && imageUpload.files.length > 0;
-
-        if (userMessage || hasImage) {
-            if (!chatStarted) {
-                welcomeArea.style.display = 'none';
-                chatStarted = true;
-                currentSessionId = null; // Reset session khi bắt đầu chat mới
+    // Thêm hàm refreshChatSessions
+    async function refreshChatSessions() {
+        try {
+            const response = await fetch('/chat/history/sessions');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            const sessions = await response.json();
+            const chatSessionsList = document.getElementById('chatSessionsList');
+            if (!chatSessionsList) return;
 
-            // Hiển thị đúng message gốc của user
-            if (userMessage) {
-                const userBubble = document.createElement('div');
-                userBubble.classList.add('user-message');
-                userBubble.textContent = userMessage;
-                chatHistory.appendChild(userBubble);
-            }
+            chatSessionsList.innerHTML = ''; // Xóa các session cũ
 
-            // Hiển thị ảnh nếu có
-            if (hasImage) {
-                // ... (phần hiển thị ảnh giữ nguyên)
-            }
+            if (sessions.length > 0) {
+                sessions.forEach(session => {
+                    const li = document.createElement('li');
+                    li.className = 'chat-session';
+                    li.dataset.sessionId = session.sessionId;
 
-            scrollToBottom();
-            inputArea.value = '';
+                    li.innerHTML = `
+                        <div class="session-title">
+                            <span class="title-text">${session.title || 'New Chat'}</span>
+                            <input type="text" class="title-edit" value="${session.title || 'New Chat'}" style="display: none;">
+                        </div>
+                        <div class="session-preview">
+                            ${(session.messages[0]?.content || '').substring(0, 30)}${(session.messages[0]?.content?.length > 30 ? '...' : '')}
+                        </div>
+                        <div class="session-date">
+                            ${new Date(session.updatedAt).toLocaleString()}
+                        </div>
+                        <button class="delete-session-btn" title="Delete chat">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    `;
 
-            // Chuyển ảnh sang base64 nếu có
-            let imageBase64 = '';
-            if (hasImage) {
-                imageBase64 = await toBase64(imageUpload.files[0]);
-                imageUpload.value = '';
-            }
-
-            // Gửi tin nhắn đến backend
-            try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: messageToSend, // message đã ghép entity
-                        userMessage: userMessage, // message gốc
-                        image: imageBase64,
-                        sessionId: currentSessionId // Gửi sessionId hiện tại (nếu có)
-                    }),
+                    chatSessionsList.appendChild(li);
                 });
-
-                const data = await response.json();
-                console.log('Entity nhận về từ server:', data.entity);
-                console.log('Bot response nhận về:', data.response);
-                if (data.entity) {
-                    setCurrentTopic(data.entity);
-                }
-                currentSessionId = data.sessionId; // Cập nhật sessionId
-
-                // Luôn hiển thị phản hồi bot, kể cả khi response là chuỗi ngắn
-                const botBubble = document.createElement('div');
-                botBubble.classList.add('bot-message');
-                botBubble.innerHTML = renderStructuredResponse(data.response || '');
-                chatHistory.appendChild(botBubble);
-                scrollToBottom();
-            } catch (error) {
-                console.error('Lỗi khi gửi tin nhắn:', error);
+            } else {
+                chatSessionsList.innerHTML = '<li class="no-sessions">No recent chats</li>';
             }
+        } catch (error) {
+            console.error('Error refreshing chat sessions:', error);
         }
+    }
+
+    function scrollToBottom() {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
     window.renderStructuredResponse = function(response) {
@@ -177,9 +139,5 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = error => reject(error);
         });
-    }
-
-    function scrollToBottom() {
-        chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 });

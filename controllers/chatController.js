@@ -2,38 +2,47 @@ const ChatSession = require('../models/ChatHistory');
 const chatService = require('../services/chatService');
 const logger = require('../utils/logger');
 const { v4: uuidv4 } = require('uuid');
-const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage() });
 
 // Tạo hoặc cập nhật phiên chat
-// Trong chatController.js
-async function updateChatSession(sessionId, role, content, image = null) {
+async function updateChatSession(sessionId, role, content) {
     try {
         const messageContent = {
             role,
             content,
-            image: image ? `data:image/jpeg;base64,${image}` : undefined
+            timestamp: new Date()
         };
 
+        let chatSession;
         if (!sessionId) {
-            // Tạo phiên mới
+            // Tạo phiên mới chỉ khi không có sessionId
             const newSessionId = uuidv4();
             const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
 
-            await ChatSession.create({
+            chatSession = await ChatSession.create({
                 sessionId: newSessionId,
                 messages: [messageContent],
                 title: title
             });
 
-            return newSessionId;
+            return chatSession.sessionId;
         } else {
             // Cập nhật phiên hiện có
-            await ChatSession.findOneAndUpdate({ sessionId }, {
+            chatSession = await ChatSession.findOneAndUpdate({ sessionId }, {
                 $push: { messages: messageContent },
                 $set: { updatedAt: new Date() }
             }, { new: true });
-            return sessionId;
+
+            if (!chatSession) {
+                // Nếu không tìm thấy session, tạo mới
+                const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+                chatSession = await ChatSession.create({
+                    sessionId,
+                    messages: [messageContent],
+                    title: title
+                });
+            }
+
+            return chatSession.sessionId;
         }
     } catch (error) {
         logger.error('Error updating chat session:', error);
@@ -41,48 +50,31 @@ async function updateChatSession(sessionId, role, content, image = null) {
     }
 }
 
-exports.handleChat = [
-    upload.single('image'),
-    async(req, res) => {
-        try {
-            // Nhận cả message gốc và message đã ghép entity
-            const { message, userMessage, sessionId } = req.body;
-            let imageBase64 = '';
+exports.handleChat = async(req, res) => {
+    try {
+        const { message, userMessage, sessionId } = req.body;
+        console.log('[handleChat] userMessage:', userMessage, '| message:', message, '| sessionId:', sessionId);
 
-            if (req.file) {
-                imageBase64 = req.file.buffer.toString('base64');
-            }
+        const nlpResult = await chatService.processMessage(message, userMessage);
+        const response = nlpResult && nlpResult.response ? nlpResult.response : nlpResult;
+        console.log('[handleChat] entity:', nlpResult && nlpResult.entity, '| response:', response);
 
-            // Xử lý tin nhắn: dùng message đã ghép entity để xử lý intent, truyền thêm userMessage (message gốc)
-            const nlpResult = await chatService.processMessage(message || '[Image]', userMessage);
-            const response = nlpResult && nlpResult.response ? nlpResult.response : nlpResult;
+        // Sử dụng updateChatSession để xử lý tin nhắn người dùng
+        const currentSessionId = await updateChatSession(sessionId, 'user', userMessage || message);
 
-            // Lưu tin nhắn người dùng: chỉ lưu message gốc (userMessage), fallback sang message nếu không có
-            const newSessionId = await updateChatSession(
-                sessionId,
-                'user',
-                userMessage || message || '[Image Upload]',
-                imageBase64
-            );
+        // Sử dụng updateChatSession để xử lý phản hồi của bot
+        await updateChatSession(currentSessionId, 'assistant', response);
 
-            // Lưu phản hồi của bot
-            await updateChatSession(
-                newSessionId,
-                'assistant',
-                response
-            );
-
-            res.json({
-                response,
-                sessionId: newSessionId,
-                entity: nlpResult && nlpResult.entity ? nlpResult.entity : null
-            });
-        } catch (error) {
-            console.error('Error:', error);
-            res.status(500).json({ error: 'Internal server error' });
-        }
+        res.json({
+            response,
+            sessionId: currentSessionId,
+            entity: nlpResult && nlpResult.entity ? nlpResult.entity : null
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-];
+};
 
 // Lấy lịch sử chat theo phiên
 exports.getChatHistory = async(req, res) => {
@@ -99,6 +91,7 @@ exports.getChatHistory = async(req, res) => {
         res.status(500).json({ error: 'Failed to fetch chat history' });
     }
 };
+
 // Thêm vào chatController.js
 exports.renderIndex = async(req, res) => {
     try {
@@ -119,7 +112,7 @@ exports.renderIndex = async(req, res) => {
         });
     }
 };
-// Trong file chatController.js
+
 exports.getChatSessions = async(req, res) => {
     try {
         const sessions = await ChatSession.find()

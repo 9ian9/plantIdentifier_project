@@ -162,3 +162,25 @@
 2025-05-06T03:30:23.985Z [info]: Chat history saved successfully
 2025-05-07T03:06:51.888Z [info]: Server is running on port 3000
 2025-05-07T03:06:51.890Z [info]: Environment: development
+2025-05-19T02:28:35.860Z [error]: MulterError: Unexpected field
+    at wrappedFileFilter (F:\doAn\plantIdentifier_project\node_modules\multer\index.js:40:19)
+    at Multipart.<anonymous> (F:\doAn\plantIdentifier_project\node_modules\multer\lib\make-middleware.js:109:7)
+    at Multipart.emit (node:events:518:28)
+    at HeaderParser.cb (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (F:\doAn\plantIdentifier_project\node_modules\streamsearch\lib\sbmh.js:248:10)
+    at SBMH.push (F:\doAn\plantIdentifier_project\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:567:19)
+    at writeOrBuffer (node:internal/streams/writable:564:12)
+2025-05-19T02:29:34.131Z [error]: MulterError: Unexpected field
+    at wrappedFileFilter (F:\doAn\plantIdentifier_project\node_modules\multer\index.js:40:19)
+    at Multipart.<anonymous> (F:\doAn\plantIdentifier_project\node_modules\multer\lib\make-middleware.js:109:7)
+    at Multipart.emit (node:events:518:28)
+    at HeaderParser.cb (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:358:14)
+    at HeaderParser.push (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:162:20)
+    at SBMH.ssCb [as _cb] (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:394:37)
+    at feed (F:\doAn\plantIdentifier_project\node_modules\streamsearch\lib\sbmh.js:248:10)
+    at SBMH.push (F:\doAn\plantIdentifier_project\node_modules\streamsearch\lib\sbmh.js:104:16)
+    at Multipart._write (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:567:19)
+    at writeOrBuffer (node:internal/streams/writable:564:12)

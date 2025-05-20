@@ -1,6 +1,7 @@
 const ChatSession = require('../models/ChatHistory');
 const { v4: uuidv4 } = require('uuid');
 const { predictPlant } = require('../services/plantRecognitionService');
+const chatService = require('../services/chatService');
 
 const classNames = {
     'acacia_images': 'Cây Keo',
@@ -27,125 +28,45 @@ const classNames = {
 
 exports.handleUpload = async(req, res) => {
     try {
-        // Xử lý trường hợp upload qua endpoint /api/upload
+        let buffer, mimeType, fileName, fileSize, base64Data;
+
         if (req.file) {
-            return handleFileUpload(req, res);
-        }
-        // Xử lý trường hợp upload qua endpoint /chat (base64)
-        else if (req.body.image) {
-            return handleBase64Upload(req, res);
+            buffer = req.file.buffer;
+            mimeType = req.file.mimetype;
+            fileName = req.file.originalname;
+            fileSize = req.file.size;
+        } else if (req.body.image) {
+            base64Data = req.body.image.replace(/^data:image\/\w+;base64,/, '');
+            buffer = Buffer.from(base64Data, 'base64');
+            mimeType = 'image/jpeg';
+            base64Data = req.body.image;
         } else {
-            return res.status(400).json({
-                status: 'error',
-                message: 'No image data provided'
-            });
+            return res.status(400).json({ status: 'error', message: 'No image data provided' });
         }
-    } catch (error) {
-        console.error('Upload error:', error);
-        res.status(500).json({
-            status: 'error',
-            message: 'Error processing image',
-            error: error.message
-        });
-    }
-};
 
-async function handleFileUpload(req, res) {
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!allowedMimeTypes.includes(req.file.mimetype)) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'Invalid file type. Only JPEG, PNG, GIF and WEBP images are allowed.'
-        });
-    }
+        // Validate file
+        const maxSize = 5 * 1024 * 1024;
+        const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
-    const maxSize = 5 * 1024 * 1024;
-    if (req.file.size > maxSize) {
-        return res.status(400).json({
-            status: 'error',
-            message: 'File size too large. Maximum size is 5MB.'
-        });
-    }
-
-    // Chạy dự đoán cây trên ảnh upload
-    const plantClassIndex = await predictPlant(req.file.buffer, req.onnxSession);
-    const plantClassKey = Object.keys(classNames)[plantClassIndex];
-    const plantName = classNames[plantClassKey] || 'Không xác định';
-
-    const imageBase64 = req.file.buffer.toString('base64');
-    const mimeType = req.file.mimetype;
-    const imageUrl = `data:${mimeType};base64,${imageBase64}`;
-
-    let sessionId = req.body.sessionId;
-    if (!sessionId) {
-        sessionId = uuidv4();
-    }
-
-    let chatSession = await ChatSession.findOne({ sessionId });
-    if (!chatSession) {
-        chatSession = new ChatSession({
-            sessionId,
-            title: 'New Chat',
-            messages: []
-        });
-    }
-
-    chatSession.messages.push({
-        role: 'user',
-        content: req.body.message || '[Image Upload]',
-        image: imageUrl,
-        timestamp: new Date(),
-        uploadDate: new Date(),
-        fileName: req.file.originalname,
-        fileSize: req.file.size,
-        fileType: mimeType
-    });
-
-    let botResponse = `Tôi đã nhận diện được đây là cây: ${plantName}.`;
-    if (req.body.message) {
-        botResponse += ` Về câu hỏi "${req.body.message}" của bạn, `;
-        botResponse += `đây là một số thông tin cơ bản về ${plantName}:`;
-    } else {
-        botResponse += ` Bạn có muốn biết thêm thông tin gì về loại cây này không?`;
-    }
-
-    chatSession.messages.push({
-        role: 'assistant',
-        content: botResponse,
-        timestamp: new Date()
-    });
-
-    await chatSession.save();
-
-    res.json({
-        status: 'success',
-        message: 'Image uploaded and plant recognized successfully',
-        data: {
-            sessionId: chatSession.sessionId,
-            imageUrl,
-            plantName,
-            plantClassIndex,
-            fileName: req.file.originalname,
-            fileSize: req.file.size,
-            fileType: mimeType,
-            uploadDate: new Date(),
-            botResponse
+        if (fileSize && fileSize > maxSize) {
+            return res.status(400).json({ status: 'error', message: 'File size too large. Max is 5MB.' });
         }
-    });
-}
 
-async function handleBase64Upload(req, res) {
-    try {
-        const base64Data = req.body.image.replace(/^data:image\/\w+;base64,/, '');
-        const buffer = Buffer.from(base64Data, 'base64');
+        if (mimeType && !allowedMimeTypes.includes(mimeType)) {
+            return res.status(400).json({ status: 'error', message: 'Invalid file type.' });
+        }
 
-        // Chạy dự đoán cây trên ảnh upload
+        // Predict plant
         const plantClassIndex = await predictPlant(buffer, req.onnxSession);
         const plantClassKey = Object.keys(classNames)[plantClassIndex];
         const plantName = classNames[plantClassKey] || 'Không xác định';
 
-        const imageUrl = `data:image/jpeg;base64,${base64Data}`;
+        // Process message with NLP
+        const userMessage = req.body.message || '[Image Upload]';
+        const nlpResult = await chatService.processMessage(plantName, userMessage);
+        const botResponse = nlpResult.response || generateBotResponse(plantName, userMessage);
 
+        // Handle session
         let sessionId = req.body.sessionId;
         if (!sessionId) {
             sessionId = uuidv4();
@@ -155,45 +76,94 @@ async function handleBase64Upload(req, res) {
         if (!chatSession) {
             chatSession = new ChatSession({
                 sessionId,
-                title: 'New Chat',
+                title: userMessage.slice(0, 30) + (userMessage.length > 30 ? '...' : ''),
                 messages: []
             });
         }
 
+        // Add user message with image
+        const imageUrl = base64Data || `data:${mimeType};base64,${buffer.toString('base64')}`;
         chatSession.messages.push({
             role: 'user',
-            content: req.body.message || '[Image Upload]',
+            content: userMessage,
             image: imageUrl,
-            timestamp: new Date()
+            timestamp: new Date(),
+            fileName,
+            fileSize,
+            fileType: mimeType
         });
 
-        let botResponse = `Tôi đã nhận diện được đây là cây: ${plantName}.`;
-        if (req.body.message) {
-            botResponse += ` Về câu hỏi "${req.body.message}" của bạn, `;
-            botResponse += `đây là một số thông tin cơ bản về ${plantName}:`;
-        } else {
-            botResponse += ` Bạn có muốn biết thêm thông tin gì về loại cây này không?`;
-        }
-
+        // Add bot response
         chatSession.messages.push({
             role: 'assistant',
             content: botResponse,
             timestamp: new Date()
         });
 
+        chatSession.updatedAt = new Date();
         await chatSession.save();
 
-        res.json({
+        return res.json({
             status: 'success',
-            message: 'Image processed and plant recognized successfully',
+            message: 'Image uploaded and plant recognized successfully',
             data: {
                 sessionId: chatSession.sessionId,
+                imageUrl,
                 plantName,
-                botResponse
+                plantClassIndex,
+                fileName,
+                fileSize,
+                fileType: mimeType,
+                botResponse,
+                entity: nlpResult.entity || plantName
             }
         });
     } catch (error) {
-        console.error('Base64 upload error:', error);
-        throw error;
+        console.error('Upload error:', error);
+        return res.status(500).json({ status: 'error', message: 'Error processing image', error: error.message });
     }
+};
+
+function generateBotResponse(plantName, userMessage) {
+    let response = `Tôi đã nhận diện được đây là cây: ${plantName}.`;
+    if (userMessage) {
+        response += ` Bạn muốn biết gì về cây này?`;
+    } else {
+        response += ` Bạn có muốn biết thêm thông tin gì về loại cây này không?`;
+    }
+    return response;
+}
+
+async function saveChatMessage({ sessionId, userMessage, imageUrl, botMessage, fileName, fileSize, mimeType }) {
+    if (!sessionId) sessionId = uuidv4();
+
+    let chatSession = await ChatSession.findOne({ sessionId });
+
+    if (!chatSession) {
+        chatSession = new ChatSession({
+            sessionId,
+            title: userMessage.slice(0, 30) + (userMessage.length > 30 ? '...' : ''),
+            messages: []
+        });
+    }
+
+    chatSession.messages.push({
+        role: 'user',
+        content: userMessage,
+        image: imageUrl,
+        timestamp: new Date(),
+        fileName,
+        fileSize,
+        fileType: mimeType
+    });
+
+    chatSession.messages.push({
+        role: 'assistant',
+        content: botMessage,
+        timestamp: new Date()
+    });
+
+    chatSession.updatedAt = new Date();
+    await chatSession.save();
+    return chatSession.sessionId;
 }
