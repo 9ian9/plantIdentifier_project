@@ -27,6 +27,7 @@ const classNames = {
 };
 
 exports.handleUpload = async(req, res) => {
+    console.log('Upload sessionId:', req.body.sessionId);
     try {
         let buffer, mimeType, fileName, fileSize, base64Data;
 
@@ -63,8 +64,15 @@ exports.handleUpload = async(req, res) => {
 
         // Process message with NLP
         const userMessage = req.body.message || '[Image Upload]';
+        console.log('Plant Name:', plantName);
+        console.log('User Message:', userMessage);
         const nlpResult = await chatService.processMessage(plantName, userMessage);
-        const botResponse = nlpResult.response || generateBotResponse(plantName, userMessage);
+        console.log('NLP Result:', nlpResult);
+
+        // Combine recognition message with NLP response
+        const recognitionMessage = `Tôi đã nhận diện được đây là :${plantName}. `;
+        const botResponse = recognitionMessage + (nlpResult.response || 'Bạn muốn biết gì về cây này?');
+        console.log('Final Bot Response:', botResponse);
 
         // Handle session
         let sessionId = req.body.sessionId;
@@ -77,8 +85,11 @@ exports.handleUpload = async(req, res) => {
             chatSession = new ChatSession({
                 sessionId,
                 title: userMessage.slice(0, 30) + (userMessage.length > 30 ? '...' : ''),
-                messages: []
+                messages: [],
+                lastPlantName: plantName
             });
+        } else {
+            chatSession.lastPlantName = plantName;
         }
 
         // Add user message with image

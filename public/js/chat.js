@@ -1,6 +1,6 @@
 import { clearImagePreview, setupImageHandlers } from './imageHandler.js';
 import { setupSpeechRecognition } from './speechRecognition.js';
-import { setupMessageHandlers } from './messageHandler.js';
+// import { setupMessageHandlers } from './messageHandler.js';
 import { refreshChatSessions, getCurrentSessionId, setCurrentSessionId } from './chatSession.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeArea = document.getElementById('welcomeArea');
     const messageInput = document.getElementById('messageInput');
     const askQuestionBtn = document.getElementById('askQuestionBtn');
-    const micBtn = document.getElementById('micBtn');
     const sidebar = document.querySelector('.sidebar');
     const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
     const imageUpload = document.getElementById('image-upload');
@@ -142,8 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const formData = new FormData();
                     formData.append('plantImage', imageUpload.files[0]);
                     if (userMessage) formData.append('message', messageToSend); // vẫn gửi để lưu lịch sử
+                    if (userMessage) formData.append('userMessage', userMessage);
                     if (getCurrentSessionId()) formData.append('sessionId', getCurrentSessionId());
 
+                    console.log('userMessage:', userMessage);
+                    console.log('messageToSend:', messageToSend);
                     const uploadRes = await fetch('/api/upload', {
                         method: 'POST',
                         body: formData
@@ -175,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (entity && !userMessage.toLowerCase().includes(entity.toLowerCase())) {
                             textToSend = userMessage + ' ' + entity;
                         }
+
                         console.log('Gửi message phụ sau upload ảnh:', textToSend, getCurrentSessionId());
                         const textRes = await fetch('/chat', {
                             method: 'POST',
@@ -244,6 +247,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (sendBtn) sendBtn.click();
+        }
+    });
 
     // Hàm lưu và lấy topic từ localStorage
     function setCurrentTopic(topic) {
@@ -269,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize all handlers
     setupImageHandlers();
     setupSpeechRecognition();
-    setupMessageHandlers();
+    // setupMessageHandlers();
 
     // Load initial chat sessions
     refreshChatSessions();
