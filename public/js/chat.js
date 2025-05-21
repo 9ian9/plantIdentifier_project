@@ -1,6 +1,5 @@
 import { clearImagePreview, setupImageHandlers } from './imageHandler.js';
 import { setupSpeechRecognition } from './speechRecognition.js';
-// import { setupMessageHandlers } from './messageHandler.js';
 import { refreshChatSessions, getCurrentSessionId, setCurrentSessionId } from './chatSession.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const askQuestionBtn = document.getElementById('askQuestionBtn');
     const sidebar = document.querySelector('.sidebar');
     const toggleSidebarBtn = document.getElementById('toggleSidebarBtn');
+    const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
     const imageUpload = document.getElementById('image-upload');
     const sendBtn = document.querySelector('.send-btn');
     let chatStarted = false;
@@ -144,8 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (userMessage) formData.append('userMessage', userMessage);
                     if (getCurrentSessionId()) formData.append('sessionId', getCurrentSessionId());
 
-                    console.log('userMessage:', userMessage);
-                    console.log('messageToSend:', messageToSend);
                     const uploadRes = await fetch('/api/upload', {
                         method: 'POST',
                         body: formData
@@ -178,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             textToSend = userMessage + ' ' + entity;
                         }
 
+                        console.log('userMessage phia duoi ne:', userMessage);
                         console.log('Gửi message phụ sau upload ảnh:', textToSend, getCurrentSessionId());
                         const textRes = await fetch('/chat', {
                             method: 'POST',
@@ -273,13 +272,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function scrollToBottom() {
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
-
+    if (uploadPhotoBtn && imageUpload) {
+        uploadPhotoBtn.addEventListener('click', () => {
+            imageUpload.click();
+        });
+    }
 
     // Initialize all handlers
     setupImageHandlers();
     setupSpeechRecognition();
-    // setupMessageHandlers();
-
     // Load initial chat sessions
     refreshChatSessions();
 });

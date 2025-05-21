@@ -63,7 +63,7 @@ exports.handleUpload = async(req, res) => {
         const plantName = classNames[plantClassKey] || 'Không xác định';
 
         // Process message with NLP
-        const userMessage = req.body.message || '[Image Upload]';
+        const userMessage = req.body.userMessage || '[Image Upload]';
         console.log('Plant Name:', plantName);
         console.log('User Message:', userMessage);
         const nlpResult = await chatService.processMessage(plantName, userMessage);
@@ -94,6 +94,7 @@ exports.handleUpload = async(req, res) => {
 
         // Add user message with image
         const imageUrl = base64Data || `data:${mimeType};base64,${buffer.toString('base64')}`;
+        console.log('userMessage from uploadController:', userMessage);
         chatSession.messages.push({
             role: 'user',
             content: userMessage,
