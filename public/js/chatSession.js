@@ -79,12 +79,15 @@ function setupSessionDelete(sessionElement) {
                     method: 'DELETE'
                 });
                 if (res.ok) {
-                    sessionElement.remove();
+                    // Nếu session hiện tại bị xóa, reset UI
                     if (currentSessionId === sessionId) {
                         currentSessionId = null;
                         chatHistory.innerHTML = '';
                         welcomeArea.style.display = 'flex';
                     }
+
+                    // Thay vì chỉ remove phần tử DOM, gọi lại toàn bộ danh sách
+                    await refreshChatSessions();
                 } else {
                     console.error('Failed to delete session');
                 }
@@ -94,6 +97,7 @@ function setupSessionDelete(sessionElement) {
         }
     });
 }
+
 
 function setupSessionTitleEditing() {
     const titleElements = document.querySelectorAll('.session-title');
