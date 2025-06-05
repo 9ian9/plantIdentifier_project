@@ -53,11 +53,9 @@ async function updateChatSession(sessionId, role, content) {
 exports.handleChat = async(req, res) => {
     try {
         const { message, userMessage, sessionId } = req.body;
-        console.log('[handleChat] userMessage:', userMessage, '| message:', message, '| sessionId:', sessionId);
 
         const nlpResult = await chatService.processMessage(message, userMessage);
         const response = nlpResult && nlpResult.response ? nlpResult.response : nlpResult;
-        console.log('[handleChat] entity:', nlpResult && nlpResult.entity, '| response:', response);
 
         // Sử dụng updateChatSession để xử lý tin nhắn người dùng
         const currentSessionId = await updateChatSession(sessionId, 'user', userMessage || message);
@@ -92,7 +90,6 @@ exports.getChatHistory = async(req, res) => {
     }
 };
 
-// Thêm vào chatController.js
 exports.renderIndex = async(req, res) => {
     try {
         const sessions = await ChatSession.find()
