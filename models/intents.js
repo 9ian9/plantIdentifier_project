@@ -3,11 +3,18 @@ module.exports = {
     chao_hoi: {
         patterns: [
             "xin chào", "chào bạn", "hi", "hello",
-            "chào buổi sáng", "chào buổi chiều"
+            "chào buổi sáng", "chào buổi chiều", "chào buổi tối",
+            "good morning", "good afternoon", "good evening",
+            "chào anh", "chào chị", "chào em", "chào bé",
+            "chào cô", "chào bác", "chào ông", "chào bà"
         ],
         responses: [
             "Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?",
-            "Chào bạn! Bạn muốn biết thông tin về loại cây nào?"
+            "Chào bạn! Bạn muốn biết thông tin về loại cây nào?",
+            "Chào mừng bạn đến với dịch vụ tư vấn cây trồng!",
+            "Xin chào! Có điều gì bạn muốn hỏi về cây trồng không?",
+            "Rất vui được gặp bạn! Bạn có câu hỏi nào về cây trồng không?"
+
         ],
         context: "greeting"
     },
@@ -145,6 +152,63 @@ module.exports = {
         entities: PlantList.getAllPlants(),
 
     },
+    cong_dung: {
+        patterns: [
+            "công dụng của cây {cây}",
+            "cây {cây} có tác dụng gì?",
+            "lợi ích của cây {cây} là gì?",
+            "cây {cây} dùng để làm gì?",
+            "tác dụng của cây {cây}?",
+            "Cây {cây} có ích gì?",
+            "{cây} có những lợi ích gì?",
+            "{cây} được sử dụng như thế nào?",
+            "{cây} có công dụng ra sao?",
+            "{cây} có thể dùng để làm gì?",
+            "Tác dụng chính của cây {cây} là gì?",
+            "Cây {cây} có lợi ích gì cho sức khỏe?",
+            "Cây {cây} thường được dùng trong những trường hợp nào?",
+            "Cây {cây} có ứng dụng gì trong đời sống?"
+        ],
+        responses: {
+            "đậu phộng": "Đậu phộng có tác dụng bổ sung protein và chất béo tốt cho cơ thể.",
+            "vải": "Quả vải chứa nhiều vitamin C, giúp tăng cường hệ miễn dịch.",
+            "dưa hấu": "Dưa hấu giúp cung cấp nước và vitamin A, tốt cho da.",
+            "bơ": "Bơ giàu chất béo không bão hòa, tốt cho tim mạch.",
+            "táo": "Táo giúp giảm cholesterol và hỗ trợ tiêu hóa.",
+            "cà phê": "Cà phê giúp tăng cường sự tỉnh táo và cải thiện tâm trạng.",
+            "keo": "Gỗ keo được sử dụng trong xây dựng và làm đồ nội thất.",
+            "mít": "Trái mít chứa nhiều vitamin và chất xơ, tốt cho tiêu hóa.",
+            "đu đủ": "Đu đủ giúp hỗ trợ tiêu hóa và có tác dụng chống viêm.",
+            "dưa leo": "Dưa leo giúp cung cấp nước và làm mát cơ thể.",
+            "xoài": "Xoài chứa nhiều vitamin C và A, có lợi cho sức khỏe mắt.",
+            "chuối": "Chuối cung cấp năng lượng nhanh và giàu kali.",
+            "mận": "Mận giúp cải thiện tiêu hóa và có tác dụng chống oxy hóa.",
+            "dừa": "Nước dừa giúp cung cấp điện giải và bổ sung nước.",
+            "cà chua": "Cà chua chứa lycopene, giúp bảo vệ tim mạch.",
+            "nha đam": "Nha đam có tác dụng làm mát, giảm viêm và làm đẹp da.",
+            "trà": "Trà chứa chất chống oxy hóa, tốt cho sức khỏe tim mạch.",
+            "sắn": "Sắn là nguồn cung cấp năng lượng và có thể dùng trong ẩm thực.",
+            "mãng cầu": "Mãng cầu có tác dụng hỗ trợ tiêu hóa và tăng cường miễn dịch.",
+            "ớt": "Ớt chứa capsaicin, có tác dụng giảm đau và tăng cường trao đổi chất."
+        },
+        entities: PlantList.getAllPlants(),
+        context: "benefits"
+    },
+
+    cam_on: {
+        patterns: [
+            "cảm ơn", "cảm ơn bạn", "cảm ơn rất nhiều",
+            "thank you", "thanks", "cảm ơn đã giúp đỡ"
+        ],
+        responses: [
+            "Cảm ơn bạn đã sử dụng dịch vụ! Nếu cần thêm thông tin, hãy quay lại nhé.",
+            "Rất vui được giúp bạn! Chúc bạn một ngày tốt lành.",
+            "Cảm ơn! Nếu có câu hỏi nào khác, đừng ngần ngại hỏi tôi.",
+            "Cảm ơn bạn! Hy vọng thông tin hữu ích cho bạn.",
+            "Cảm ơn đã tin tưởng! Chúc bạn thành công với cây trồng của mình."
+        ],
+        context: "thank_you"
+    },
 
     hello_en: {
         patterns: [
@@ -164,12 +228,29 @@ module.exports = {
             "{plant} scientific name"
         ],
         responses: {
-            "rice": "The scientific name of rice is Oryza sativa L.",
-            "mango": "The scientific name of mango is Mangifera indica.",
-            "coffee": "The scientific name of coffee is Coffea spp.",
-            "pepper": "The scientific name of pepper is Piper nigrum."
+            "peanut": "The scientific name of the peanut plant is Arachis hypogaea.",
+            "lychee": "The scientific name of the lychee plant is Litchi chinensis.",
+            "watermelon": "The scientific name of the watermelon plant is Citrullus lanatus.",
+            "avocado": "The scientific name of the avocado plant is Persea americana.",
+            "apple": "The scientific name of the apple tree is Malus domestica.",
+            "coffee": "The scientific name of the coffee plant is Coffea spp.",
+            "acacia": "The scientific name of the acacia tree is Acacia spp.",
+            "jackfruit": "The scientific name of the jackfruit tree is Artocarpus heterophyllus.",
+            "papaya": "The scientific name of the papaya plant is Carica papaya.",
+            "cucumber": "The scientific name of the cucumber plant is Cucumis sativus.",
+            "mango": "The scientific name of the mango tree is Mangifera indica.",
+            "banana": "The scientific name of the banana plant is Musa spp.",
+            "plum": "The scientific name of the plum tree is Prunus salicina.",
+            "coconut": "The scientific name of the coconut tree is Cocos nucifera.",
+            "tomato": "The scientific name of the tomato plant is Solanum lycopersicum.",
+            "aloe vera": "The scientific name of the aloe vera plant is Aloe vera.",
+            "tea": "The scientific name of the tea plant is Camellia sinensis.",
+            "cassava": "The scientific name of the cassava plant is Manihot esculenta.",
+            "soursop": "The scientific name of the soursop plant is Annona spp.",
+            "chili": "The scientific name of the chili plant is Capsicum spp."
+
         },
-        entities: ["rice", "mango", "coffee", "pepper"],
+        entities: PlantList.getAllPlantsEn(),
         context: "scientific_name_en"
     },
     plant_uses_en: {
@@ -180,12 +261,28 @@ module.exports = {
             "uses of {plant}"
         ],
         responses: {
-            "rice": "Rice is mainly grown for its grains, which are a staple food.",
-            "mango": "Mango is eaten fresh, made into smoothies, jams, juices, and desserts.",
-            "coffee": "Coffee is used to make one of the world's most popular beverages.",
-            "pepper": "Pepper is an important spice used to enhance the flavor of dishes."
+            "peanut": "Peanuts are beneficial for providing protein and healthy fats.",
+            "lychee": "Lychee contains a lot of vitamin C, which boosts the immune system.",
+            "watermelon": "Watermelon helps provide hydration and vitamin A, good for the skin.",
+            "avocado": "Avocado is rich in unsaturated fats, which are good for heart health.",
+            "apple": "Apples help reduce cholesterol and support digestion.",
+            "coffee": "Coffee enhances alertness and improves mood.",
+            "acacia": "Acacia wood is used in construction and making furniture.",
+            "jackfruit": "Jackfruit contains many vitamins and fiber, beneficial for digestion.",
+            "papaya": "Papaya aids digestion and has anti-inflammatory properties.",
+            "cucumber": "Cucumber provides hydration and cools the body.",
+            "mango": "Mango is high in vitamins C and A, beneficial for eye health.",
+            "banana": "Bananas provide quick energy and are rich in potassium.",
+            "plum": "Plums improve digestion and have antioxidant effects.",
+            "coconut": "Coconut water provides electrolytes and hydration.",
+            "tomato": "Tomatoes contain lycopene, which helps protect heart health.",
+            "aloe vera": "Aloe vera cools, reduces inflammation, and improves skin health.",
+            "tea": "Tea contains antioxidants, beneficial for heart health.",
+            "cassava": "Cassava is a source of energy and can be used in cooking.",
+            "soursop": "Soursop helps with digestion and boosts the immune system.",
+            "chili": "Chili contains capsaicin, which reduces pain and boosts metabolism."
         },
-        entities: ["rice", "mango", "coffee", "pepper"],
+        entities: PlantList.getAllPlantsEn(),
         context: "uses_en"
     }
     // Có thể thêm các intents khác

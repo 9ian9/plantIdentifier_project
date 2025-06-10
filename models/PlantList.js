@@ -5,6 +5,11 @@ class PlantList {
             "dưa leo", "xoài", "chuối", "mận", "dừa", "cà chua", "nha đam", "trà", "sắn",
             "mãng cầu", "ớt"
         ];
+        this.plants_en = [
+            "peanut", "lychee", "watermelon", "avocado", "apple", "coffee", "acacia", "jackfruit", "papaya",
+            "cucumber", "mango", "banana", "plum", "coconut", "tomato", "aloe vera", "tea", "cassava",
+            "soursop", "chili"
+        ];
 
         this.scientificNames = {
             "đậu phộng": "Arachis hypogaea",
@@ -32,6 +37,10 @@ class PlantList {
 
     getAllPlants() {
         return this.plants;
+    }
+
+    getAllPlantsEn() {
+        return this.plants_en;
     }
 
     getScientificName(plant) {

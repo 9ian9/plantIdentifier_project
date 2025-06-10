@@ -51,6 +51,17 @@ class ChatService {
                 };
             }
 
+            // Xử lý intent cảm ơn
+            if (intentResult.intent === 'cam_on') {
+                if (!intent.responses || !Array.isArray(intent.responses) || intent.responses.length === 0) {
+                    return { response: RESPONSES.UNKNOWN, entity: null };
+                }
+                return {
+                    response: intent.responses[Math.floor(Math.random() * intent.responses.length)],
+                    entity: intentResult.entity || null
+                };
+            }
+
             // Xử lý các intent khác có responses là mảng
             if (intent.responses && Array.isArray(intent.responses)) {
                 return {
