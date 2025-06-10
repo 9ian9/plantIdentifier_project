@@ -28,3 +28,22 @@
     at SBMH.push (F:\doAn\plantIdentifier_project\node_modules\streamsearch\lib\sbmh.js:104:16)
     at Multipart._write (F:\doAn\plantIdentifier_project\node_modules\busboy\lib\types\multipart.js:567:19)
     at writeOrBuffer (node:internal/streams/writable:564:12)
+2025-06-08T18:11:05.495Z [error]: ReferenceError: F:\doAn\plantIdentifier_project\views\index.ejs:28
+    26|                         <% if (chatSessions && chatSessions.length> 0) { %>
+    27|                             <% chatSessions.forEach(session=> { %>
+ >> 28|                                 <li class="chat-session <%= session.sessionId === currentSessionId ? 'active-chat-session' : '' %>" data-session-id="<%= session.sessionId %>">
+    29|                                     <div class="session-title">
+    30|                                         <span class="title-text">
+    31|                                             <%= session.title || 'New Chat' %>
+
+currentSessionId is not defined
+    at eval ("F:\\doAn\\plantIdentifier_project\\views\\index.ejs":18:48)
+    at Array.forEach (<anonymous>)
+    at eval ("F:\\doAn\\plantIdentifier_project\\views\\index.ejs":15:21)
+    at index (F:\doAn\plantIdentifier_project\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (F:\doAn\plantIdentifier_project\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (F:\doAn\plantIdentifier_project\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (F:\doAn\plantIdentifier_project\node_modules\express\lib\view.js:139:8)
+    at tryRender (F:\doAn\plantIdentifier_project\node_modules\express\lib\application.js:627:10)
+    at Function.render (F:\doAn\plantIdentifier_project\node_modules\express\lib\application.js:574:3)
+    at ServerResponse.render (F:\doAn\plantIdentifier_project\node_modules\express\lib\response.js:909:7)

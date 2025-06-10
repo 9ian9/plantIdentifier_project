@@ -21,6 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const sessionItem = e.target.closest('.chat-session');
         if (!sessionItem) return;
 
+        // Remove active class from all session items
+        document.querySelectorAll('.chat-session').forEach(item => {
+            item.classList.remove('active-chat-session');
+        });
+
+        // Add active class to the clicked session item
+        sessionItem.classList.add('active-chat-session');
+
         const sessionId = sessionItem.dataset.sessionId;
 
         try {
@@ -264,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (sidebar && toggleSidebarBtn) {
         toggleSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('closed');
+            sidebar.classList.toggle('active');
         });
     }
 

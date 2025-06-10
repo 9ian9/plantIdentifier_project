@@ -49,8 +49,18 @@ async function predictPlant(bufferImage, onnxSession) {
 
     // Tìm chỉ số max confidence
     let maxIdx = 0;
+    let maxVal = output[0];
     for (let i = 1; i < output.length; i++) {
-        if (output[i] > output[maxIdx]) maxIdx = i;
+        if (output[i] > maxVal) {
+            maxVal = output[i];
+            maxIdx = i;
+        }
+    }
+    console.log('maxVal: ', maxVal);
+    // Nếu confidence thấp hơn ngưỡng, trả về -1 (không xác định)
+    const CONFIDENCE_THRESHOLD = 5;
+    if (maxVal < CONFIDENCE_THRESHOLD) {
+        return -1;
     }
 
     return maxIdx;

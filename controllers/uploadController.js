@@ -2,6 +2,7 @@ const ChatSession = require('../models/ChatHistory');
 const { v4: uuidv4 } = require('uuid');
 const { predictPlant } = require('../services/plantRecognitionService');
 const chatService = require('../services/chatService');
+const plantList = require('../models/PlantList');
 
 const classNames = {
     'acacia_images': 'Cây Keo',
@@ -30,7 +31,7 @@ exports.handleUpload = async(req, res) => {
     console.log('Upload sessionId:', req.body.sessionId);
     try {
         let buffer, mimeType, fileName, fileSize, base64Data;
-
+        const userMessage = req.body.userMessage || '[Image Upload]';
         if (req.file) {
             buffer = req.file.buffer;
             mimeType = req.file.mimetype;
@@ -60,19 +61,23 @@ exports.handleUpload = async(req, res) => {
         // Predict plant
         const plantClassIndex = await predictPlant(buffer, req.onnxSession);
         const plantClassKey = Object.keys(classNames)[plantClassIndex];
-        const plantName = classNames[plantClassKey] || 'Không xác định';
+        const plantName = classNames[plantClassKey];
 
-        // Process message with NLP
-        const userMessage = req.body.userMessage || '[Image Upload]';
-        console.log('Plant Name:', plantName);
-        console.log('User Message:', userMessage);
-        const nlpResult = await chatService.processMessage(plantName, userMessage);
-        console.log('NLP Result:', nlpResult);
+        let botResponse;
+        let nlpResult = {};
+        if (plantClassIndex === -1) {
+            botResponse = 'Xin lỗi, tôi không thể xác định loại cây từ ảnh này. Bạn vui lòng thử lại với ảnh khác rõ nét hơn nhé!';
+        } else {
+            // Process message with NLP
+            console.log('Plant Name:', plantName);
+            console.log('User Message:', userMessage);
+            const nlpResult = await chatService.processMessage(plantName, userMessage);
+            console.log('NLP Result:', nlpResult);
 
-        // Combine recognition message with NLP response
-        const recognitionMessage = `Tôi đã nhận diện được đây là :${plantName}. `;
-        const botResponse = recognitionMessage + (nlpResult.response || 'Bạn muốn biết gì về cây này?');
-        console.log('Final Bot Response:', botResponse);
+            // Combine recognition message with NLP response
+            const recognitionMessage = `Tôi đã nhận diện được đây là :${plantName}. `;
+            botResponse = recognitionMessage + (nlpResult.response || 'Bạn muốn biết gì về cây này?');
+        }
 
         // Handle session
         let sessionId = req.body.sessionId;

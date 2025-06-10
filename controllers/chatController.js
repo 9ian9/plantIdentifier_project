@@ -16,7 +16,7 @@ async function updateChatSession(sessionId, role, content) {
         if (!sessionId) {
             // Tạo phiên mới chỉ khi không có sessionId
             const newSessionId = uuidv4();
-            const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+            const title = content.substring(0, 20) + (content.length > 20 ? '...' : '');
 
             chatSession = await ChatSession.create({
                 sessionId: newSessionId,
@@ -34,7 +34,7 @@ async function updateChatSession(sessionId, role, content) {
 
             if (!chatSession) {
                 // Nếu không tìm thấy session, tạo mới
-                const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+                const title = content.substring(0, 20) + (content.length > 20 ? '...' : '');
                 chatSession = await ChatSession.create({
                     sessionId,
                     messages: [messageContent],
@@ -99,13 +99,15 @@ exports.renderIndex = async(req, res) => {
 
         res.render('index', {
             chatSessions: sessions,
-            uploadedImage: req.query.uploadedImage || null
+            uploadedImage: req.query.uploadedImage || null,
+            currentSessionId: req.query.sessionId || null
         });
     } catch (error) {
         console.error('Error rendering index:', error);
         res.render('index', {
             chatSessions: [],
-            uploadedImage: req.query.uploadedImage || null
+            uploadedImage: req.query.uploadedImage || null,
+            currentSessionId: req.query.sessionId || null
         });
     }
 };
