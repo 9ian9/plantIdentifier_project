@@ -23,10 +23,6 @@ async function predictPlant(bufferImage, onnxSession) {
         floatData[i] = data[i] / 255.0;
     }
 
-    // ONNX model input shape: [1, 3, 224, 224] (batch, channels, height, width)
-    // sharp output data: [width*height*channels] theo hàng RGB RGB ...
-    // Cần chuyển từ HWC sang CHW
-
     const chwData = new Float32Array(3 * 224 * 224);
     for (let i = 0; i < 224 * 224; i++) {
         chwData[i] = floatData[i * 3]; // R channel

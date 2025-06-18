@@ -103,8 +103,6 @@ class ChatService {
     }
 
     generateResponse(intentConfig, entities) {
-        // Logic này có vẻ không còn cần thiết với cách xử lý mới trong processMessage
-        // Bạn có thể cân nhắc loại bỏ hoặc điều chỉnh nếu vẫn cần.
         if (entities.length > 0 && typeof intentConfig.responses === 'object') {
             for (const entity of entities) {
                 if (intentConfig.responses[entity]) {
