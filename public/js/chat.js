@@ -21,6 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const sessionItem = e.target.closest('.chat-session');
         if (!sessionItem) return;
 
+        // Remove active class from all session items
+        document.querySelectorAll('.chat-session').forEach(item => {
+            item.classList.remove('active-chat-session');
+        });
+
+        // Add active class to the clicked session item
+        sessionItem.classList.add('active-chat-session');
+
         const sessionId = sessionItem.dataset.sessionId;
 
         try {
@@ -188,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             }),
                         });
                         const textData = await textRes.json();
-                        console.log('Bot trả lời cho message phụ:', textData.response);
                         // Lưu entity nếu có
                         if (textData.entity) setCurrentTopic(textData.entity);
                         // Hiển thị phản hồi bot cho text
@@ -265,16 +272,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (sidebar && toggleSidebarBtn) {
         toggleSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('closed');
+            sidebar.classList.toggle('active');
         });
     }
 
     function scrollToBottom() {
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
-    if (uploadPhotoBtn && imageUpload) {
+    if (uploadPhotoBtn) {
         uploadPhotoBtn.addEventListener('click', () => {
             imageUpload.click();
+            // Hide welcome area when photo upload is initiated
+            welcomeArea.style.display = 'none';
         });
     }
 

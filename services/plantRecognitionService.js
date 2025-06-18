@@ -23,10 +23,6 @@ async function predictPlant(bufferImage, onnxSession) {
         floatData[i] = data[i] / 255.0;
     }
 
-    // ONNX model input shape: [1, 3, 224, 224] (batch, channels, height, width)
-    // sharp output data: [width*height*channels] theo hàng RGB RGB ...
-    // Cần chuyển từ HWC sang CHW
-
     const chwData = new Float32Array(3 * 224 * 224);
     for (let i = 0; i < 224 * 224; i++) {
         chwData[i] = floatData[i * 3]; // R channel
@@ -49,8 +45,18 @@ async function predictPlant(bufferImage, onnxSession) {
 
     // Tìm chỉ số max confidence
     let maxIdx = 0;
+    let maxVal = output[0];
     for (let i = 1; i < output.length; i++) {
-        if (output[i] > output[maxIdx]) maxIdx = i;
+        if (output[i] > maxVal) {
+            maxVal = output[i];
+            maxIdx = i;
+        }
+    }
+    console.log('maxVal: ', maxVal);
+    // Nếu confidence thấp hơn ngưỡng, trả về -1 (không xác định)
+    const CONFIDENCE_THRESHOLD = 5;
+    if (maxVal < CONFIDENCE_THRESHOLD) {
+        return -1;
     }
 
     return maxIdx;

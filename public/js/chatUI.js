@@ -16,7 +16,6 @@ function scrollToBottom() {
 }
 
 function renderStructuredResponse(content) {
-    // Add your response formatting logic here
     return content;
 }
 

@@ -61,7 +61,7 @@ app.use('/chat/history', chatHistoryRouter);
 app.use('/api/upload', uploadRouter);
 app.get('/', chatController.renderIndex);
 
-// Error handling middleware (phải đặt sau tất cả các routes)
+// Error handling middleware 
 app.use(errorHandler);
 
 (async() => {
@@ -75,7 +75,7 @@ app.use(errorHandler);
             console.log(`Server running on:  http://localhost:${PORT}`);
         });
 
-        // Thêm listener để kiểm tra trạng thái kết nối
+        // listener để kiểm tra trạng thái kết nối
         mongoose.connection.on('connected', () => {
             console.log('Mongoose connected to DB');
         });
@@ -93,9 +93,5 @@ app.use(errorHandler);
         process.exit(1);
     }
 })();
-// Khởi động server
-// app.listen(port, () => {
-//     console.log(`App is running at http://localhost:${port}`);
-// });
 
 module.exports = app;

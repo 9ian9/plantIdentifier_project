@@ -1,12 +1,20 @@
+const PlantList = require('./PlantList');
 module.exports = {
     chao_hoi: {
         patterns: [
             "xin chào", "chào bạn", "hi", "hello",
-            "chào buổi sáng", "chào buổi chiều"
+            "chào buổi sáng", "chào buổi chiều", "chào buổi tối",
+            "good morning", "good afternoon", "good evening",
+            "chào anh", "chào chị", "chào em", "chào bé",
+            "chào cô", "chào bác", "chào ông", "chào bà"
         ],
         responses: [
             "Xin chào! Tôi có thể giúp gì cho bạn về đặc điểm cây trồng?",
-            "Chào bạn! Bạn muốn biết thông tin về loại cây nào?"
+            "Chào bạn! Bạn muốn biết thông tin về loại cây nào?",
+            "Chào mừng bạn đến với dịch vụ tư vấn cây trồng!",
+            "Xin chào! Có điều gì bạn muốn hỏi về cây trồng không?",
+            "Rất vui được gặp bạn! Bạn có câu hỏi nào về cây trồng không?"
+
         ],
         context: "greeting"
     },
@@ -39,11 +47,7 @@ module.exports = {
             "mãng cầu": "Tên khoa học của cây mãng cầu là Annona spp.",
             "ớt": "Tên khoa học của cây ớt là Capsicum spp."
         },
-        entities: [
-            "đậu phộng", "vải", "dưa hấu", "bơ", "táo", "cà phê", "keo", "mít", "đu đủ",
-            "dưa leo", "xoài", "chuối", "mận", "dừa", "cà chua", "nha đam", "trà", "sắn",
-            "mãng cầu", "ớt"
-        ],
+        entities: PlantList.getAllPlants(),
         context: "scientific_name"
     },
 
@@ -55,7 +59,7 @@ module.exports = {
             "đặc điểm thực vật học của {cây}"
         ],
         responses: {
-            "dừa": "Cây dừa (Cocos nucifera) là một loài thực vật thuộc họ Cau (Arecaceae). Dưới đây là một số đặc điểm sinh học chính của cây dừa: \n\nThân cây: Thân dừa là thân cột, không phân cành, có nhiều sẹo lá do lá rụng để lại. Thân có thể cao tới 30 mét. \n\nLá: Lá dừa là lá xẻ thùy lông chim lớn, dài tới 4-6 mét. Lá tập trung ở đỉnh thân tạo thành tán lá. \n\nHoa: Hoa dừa là hoa đơn tính cùng gốc, tức là hoa đực và hoa cái nở trên cùng một cây. Hoa mọc thành cụm hoa lớn ở nách lá. \n\nQuả: Quả dừa là loại quả hạch xơ, có lớp vỏ ngoài (vỏ quả ngoài), lớp xơ (vỏ quả giữa), lớp sọ cứng (vỏ quả trong), phần cùi trắng (nội nhũ) và nước dừa (nội nhũ lỏng). \n\nRễ: Hệ rễ dừa là rễ chùm, phát triển từ gốc thân và lan rộng trong đất. \n\nCây dừa thường phát triển tốt ở vùng khí hậu nhiệt đới, ven biển, nơi có nhiều ánh nắng mặt trời, nhiệt độ ấm áp và lượng mưa dồi dào. Chúng có khả năng chịu mặn tốt.",
+            "dừa": "Cây dừa (Cocos nucifera) là một loài thực vật thuộc họ Cau (Arecaceae). Dưới đây là một số đặc điểm sinh học chính của cây dừa: \n\n1.Thân cây: Thân dừa là thân cột, không phân cành, có nhiều sẹo lá do lá rụng để lại. Thân có thể cao tới 30 mét. \n\nLá: Lá dừa là lá xẻ thùy lông chim lớn, dài tới 4-6 mét. Lá tập trung ở đỉnh thân tạo thành tán lá. \n\nHoa: Hoa dừa là hoa đơn tính cùng gốc, tức là hoa đực và hoa cái nở trên cùng một cây. Hoa mọc thành cụm hoa lớn ở nách lá. \n\nQuả: Quả dừa là loại quả hạch xơ, có lớp vỏ ngoài (vỏ quả ngoài), lớp xơ (vỏ quả giữa), lớp sọ cứng (vỏ quả trong), phần cùi trắng (nội nhũ) và nước dừa (nội nhũ lỏng). \n\nRễ: Hệ rễ dừa là rễ chùm, phát triển từ gốc thân và lan rộng trong đất. \n\nCây dừa thường phát triển tốt ở vùng khí hậu nhiệt đới, ven biển, nơi có nhiều ánh nắng mặt trời, nhiệt độ ấm áp và lượng mưa dồi dào. Chúng có khả năng chịu mặn tốt.",
             "xoài": "Thân cây: Xoài là loại cây thân gỗ lớn, có thể đạt chiều cao từ 10 đến 15 mét, thậm chí cao hơn. Cây có tán lá rộng.\n\nBộ rễ: Cây xoài có rễ cọc phát triển mạnh, có thể ăn sâu xuống đất tới 6-8 mét. Cây cũng có nhiều rễ nhánh.\n\nÁnh sáng: Xoài là cây ưa sáng, ánh sáng mặt trời trực tiếp rất quan trọng cho sự sinh trưởng và phát triển tốt của cây.\n\nĐất trồng: Cây xoài có thể trồng trên nhiều loại đất khác nhau, nhưng phù hợp nhất là đất phù sa hoặc đất thịt.",
             "cà phê": "Phân loại: Cà phê là cây thân gỗ nhỏ, sống lâu năm. Có nhiều loài cà phê khác nhau, phổ biến nhất là cà phê chè (Arabica) và cà phê vối (Robusta).\n\nChiều cao: Chiều cao của cây cà phê thay đổi tùy thuộc vào loài và điều kiện sinh trưởng, thường từ 4 đến 10 mét. Cà phê chè thường là dạng cây bụi, cao khoảng 2-3 mét.\n\nThân cây: Thân cây trưởng thành có vỏ sần sùi.\n\nCành: Cây cà phê có các cành cơ bản và cành thứ cấp.\n\nLá: Lá cà phê thường có màu xanh, mặt lá nhẵn bóng.\n\nHoa: Cây cà phê có hoa. Cà phê chè là cây tự thụ phấn.\n\nQuả: Quả cà phê là loại quả hạch.\n\nÁnh sáng: Cây cà phê ưa ánh sáng tán xạ, không chịu được ánh sáng mặt trời quá mạnh nhưng cũng không phát triển tốt trong điều kiện quá thiếu sáng. Việc trồng cây che bóng thường được áp dụng trong canh tác cà phê.\n\nKhả năng thích nghi: Các giống cà phê khác nhau có khả năng thích nghi với các điều kiện đất đai và khí hậu khác nhau. Ví dụ, giống cà phê Đài Loan xanh có khả năng thích nghi tốt với đất phèn và đất nhiễm mặn nhẹ.\n\nThời gian sinh trưởng: Cà phê thường mất khoảng 3-4 năm để bắt đầu ra hoa và cho quả. Thời gian thu hoạch thường kéo dài từ tháng 10 đến tháng 12.",
             "đậu phộng": "Phân loại: Đậu phộng (Arachis hypogaea) thuộc họ Đậu (Fabaceae). Đây là cây thân thảo, sống hàng năm.\n\nThân: Thân cây đậu phộng có thể cao từ 30 đến 50 cm. Cây có thân nhẵn và có thể phân nhánh.\n\nLá: Lá đậu phộng là lá kép, có màu xanh sáng và thường mọc đối xứng nhau.\n\nRễ: Cây đậu phộng có rễ cọc và rễ phụ phát triển mạnh, giúp cây hút nước và dinh dưỡng từ đất.\n\nQuả: Quả đậu phộng là quả hạch, thường phát triển dưới mặt đất. Mỗi quả chứa từ 1 đến 3 hạt đậu phộng.",
@@ -76,7 +80,7 @@ module.exports = {
             "keo": "Phân loại: Keo (Acacia spp.) thuộc họ Fabaceae. Đây là cây thân gỗ, sống lâu năm.\n\nThân: Cây keo có thể cao từ 10 đến 20 mét. Thân cây có vỏ nhẵn và có thể phân nhánh.\n\nLá: Lá keo là lá kép, có màu xanh sáng và mọc đối xứng nhau.\n\nRễ: Cây keo có rễ cọc và rễ nhánh phát triển mạnh, giúp cây hút nước và dinh dưỡng từ đất.\n\nQuả: Quả keo là quả hạch, có màu xanh khi còn non và chuyển sang màu nâu khi chín.",
             "mận": "Cây mận (thường là các loài thuộc chi Prunus, ví dụ như Prunus domestica) là một loại cây ăn quả phổ biến. Dưới đây là một số đặc điểm sinh học chính của cây mận: \n\nThân cây: Cây mận là cây thân gỗ nhỏ hoặc nhỡ, thường có chiều cao từ 3 đến 10 mét. Thân cây có vỏ màu nâu sẫm, có thể nứt nẻ khi cây già. Cây có nhiều cành. \n\nLá: Lá mận là lá đơn, mọc cách, hình bầu dục hoặc elip, mép lá có răng cưa. Mặt trên lá thường nhẵn, màu xanh đậm. \n\nHoa: Hoa mận thường nở vào mùa xuân, trước hoặc cùng lúc với khi lá non mọc. Hoa có 5 cánh màu trắng hoặc hồng nhạt, mọc đơn độc hoặc thành chùm nhỏ. Hoa mận thường có mùi thơm nhẹ và thu hút côn trùng thụ phấn. \n\nQuả: Quả mận là loại quả hạch, hình tròn hoặc bầu dục. Vỏ quả nhẵn, có nhiều màu sắc khác nhau tùy giống (tím, đỏ, vàng, xanh). Bên trong có lớp thịt quả mọng nước bao quanh một hạt cứng (hạch). \n\nRễ: Hệ rễ của cây mận là rễ chùm, phát triển tương đối sâu và rộng trong đất, giúp cây đứng vững và hút chất dinh dưỡng. \n\nCây mận thường phát triển tốt ở vùng khí hậu ôn đới hoặc cận nhiệt đới, cần một thời gian lạnh nhất định trong mùa đông để phân hóa mầm hoa. Chúng thích đất tơi xốp, thoát nước tốt và đủ ánh sáng mặt trời."
         },
-        entities: ["dừa", "xoài", "cà phê", "đậu phộng", "vải", "dưa hấu", "bơ", "táo", "cà chua", "nha đam", "trà", "sắn", "mãng cầu", "ớt", "mít", "đu đủ", "dưa leo", "chuối", "keo", "mận"],
+        entities: PlantList.getAllPlants(),
         context: "biological_characteristics"
     },
 
@@ -110,7 +114,7 @@ module.exports = {
             "keo": "Cây keo là loại cây lâm nghiệp quan trọng, được trồng phổ biến để lấy gỗ. Dưới đây là kỹ thuật trồng và chăm sóc cây keo: \n\n1. Yêu cầu về điều kiện sinh thái:\n\nVị trí: Keo thích hợp trồng ở những vùng có vĩ độ từ 10 đến 22 độ Bắc, độ cao dưới 500m so với mực nước biển.\n\nĐất: Keo có thể trồng trên nhiều loại đất khác nhau, nhưng cần đảm bảo thoát nước tốt.\n\n2. Chuẩn bị đất và hố trồng:\n\nPhát dọn sạch thực bì (cây cỏ, bụi rậm) xung quanh khu vực trồng.\n\nCuốc hố trồng theo quy cách.\n\nBón lót cho mỗi hố: 200g (0.2 kg) phân NPK trộn đều với 1 - 1.5 kg phân chuồng hoai mục. Cào lớp đất mặt khi cuốc hố xuống để trộn phân.\n\n3. Chuẩn bị cây giống:\n\nCó thể gieo hạt keo trực tiếp trên luống đất hoặc cấy vào bầu đất sau khi hạt nứt nanh.\n\nKỹ thuật chuẩn bị đất, làm bầu, chăm sóc và nuôi dưỡng cây con trong vườn ươm rất quan trọng để có cây giống khỏe mạnh.\n\nĐối với cây keo lai, có thể sử dụng phương pháp ghép cành. Vị trí ghép thường cách chồi ngọn 30-40 cm trở lên.\n\n4. Kỹ thuật trồng:\n\nThời vụ trồng:\n\nVụ Xuân: Trồng xong trước tháng 4.\n\nVụ Thu: Trồng xong trước ngày 15/11.\n\nMật độ trồng: Tùy thuộc vào mục đích trồng (lấy gỗ dăm hay gỗ lớn) và điều kiện đất đai. Mật độ phổ biến có thể là 1600 cây/ha.\n\nCách trồng: Đặt cây con vào hố đã bón lót, lấp đất và nén chặt.\n\n5. Chăm sóc định kỳ:\n\nTrồng dặm: Sau khi trồng khoảng 15 ngày, kiểm tra và trồng dặm lại những cây bị chết để đảm bảo mật độ.\n\nChăm sóc trong 3 năm đầu: Cần chăm sóc liên tục trong 3 năm đầu sau khi trồng.\n\nBón thúc: Trong 3 năm đầu, mỗi năm bón thúc 1-2 lần. Lượng bón mỗi lần khoảng 0.1 - 0.2 kg NPK cho mỗi cây. Tùy theo điều kiện sản xuất kinh doanh có thể điều chỉnh số lần bón.\n\nTưới nước: Cung cấp đủ nước cho cây, đặc biệt là trong mùa khô.\n\nPhòng trừ cỏ dại: Thường xuyên làm sạch cỏ xung quanh gốc cây. Có thể phủ gốc bằng cỏ, rác để hạn chế cỏ mọc và giữ ẩm.\n\nTỉa thưa (đối với rừng trồng gỗ lớn): Đối với rừng trồng mật độ dày (ví dụ 1600 cây/ha), cần tỉa thưa 2 lần:\n\nLần 1: Khi rừng đạt 6-8 tuổi, tỉa bỏ 1/3 đến 2/5 số cây bị chèn ép, cong queo, sâu bệnh.\n\nLần 2: Khi rừng đạt 10-15 tuổi, tiếp tục tỉa thưa để tạo không gian cho các cây còn lại phát triển tốt hơn.\n\nKỹ thuật trồng và chăm sóc cây keo tương đối đơn giản nhưng việc tuân thủ các bước cơ bản sẽ giúp rừng keo phát triển nhanh và đạt năng suất cao.",
             "mận": "Cây mận là loại cây ăn quả cần được chăm sóc đúng kỹ thuật để phát triển khỏe mạnh. Dưới đây là các bước cơ bản: \n\n1. Chọn địa điểm trồng: \n\nCây mận cần nhiều ánh sáng mặt trời, ít nhất 6-8 tiếng mỗi ngày. Chọn nơi thoáng đãng, không bị che bóng. \n\nĐất trồng cần tơi xốp, giàu dinh dưỡng và đặc biệt là phải thoát nước tốt. Cây mận không chịu được ngập úng. \n\nTránh những vùng đất trũng hoặc nơi có sương muối đọng lại, vì có thể ảnh hưởng đến hoa và quả non. \n\n2. Chuẩn bị đất: \n\nLàm sạch cỏ dại và tàn dư thực vật. \n\nCày bừa hoặc xới đất tơi xốp. \n\nTrộn phân hữu cơ hoai mục (phân chuồng, phân xanh, tro trấu...) vào đất để tăng độ phì nhiêu và cải thiện cấu trúc đất. \n\nĐộ pH đất lý tưởng cho cây mận thường từ 6.0 đến 6.5 (hơi chua đến trung tính). Nếu đất quá chua hoặc quá kiềm, cần điều chỉnh bằng vôi hoặc lưu huỳnh. \n\n3. Chọn giống và cây giống: \n\nChọn giống mận phù hợp với điều kiện khí hậu địa phương bạn (đặc biệt là yêu cầu về giờ lạnh trong mùa đông). \n\nChọn cây giống khỏe mạnh, không sâu bệnh, có bầu rễ tốt và được mua từ các vườn ươm uy tín. \n\n4. Đào hố và trồng cây: \n\nĐào hố trồng có kích thước đủ lớn để chứa bộ rễ (khoảng 60x60x60 cm hoặc lớn hơn tùy đất). \n\nĐặt cây con vào giữa hố, rễ trải đều. \n\nLấp đất nhẹ nhàng xung quanh gốc, nén chặt vừa phải để cây đứng vững và không còn túi khí. \n\nĐảm bảo mắt ghép (nếu có) nằm cao hơn mặt đất khoảng 5-10 cm. \n\nTưới nước đẫm ngay sau khi trồng. \n\n5. Khoảng cách trồng: \n\nKhoảng cách trồng tùy thuộc vào giống và phương pháp cắt tỉa, thường từ 4m x 4m đến 6m x 6m. \n\n6. Tưới nước: \n\nCây mận cần được tưới nước đều đặn, đặc biệt là trong thời kỳ cây con, khi ra hoa, đậu quả và trong mùa khô hạn. \n\nGiữ ẩm cho đất nhưng tránh để đất bị úng nước. \n\n7. Bón phân: \n\nCây mận cần được cung cấp đủ dinh dưỡng để phát triển và ra quả. \n\nBón phân hữu cơ hàng năm vào cuối mùa đông hoặc đầu mùa xuân. \n\nBón phân hóa học cân đối N-P-K theo nhu cầu của cây ở từng giai đoạn (trước khi ra hoa, sau khi đậu quả, sau thu hoạch). \n\nLời khuyên: Để bón phân hiệu quả nhất, bạn nên làm xét nghiệm đất để biết chính xác đất thiếu chất gì. \n\nNếu kết quả xét nghiệm cho thấy pH đất dưới 6 hoặc hàm lượng carbon hữu cơ thấp (dưới 15 g/kg), bạn nên xem xét việc bón thêm phân biochar để cải thiện đất và giúp cây hấp thu dinh dưỡng tốt hơn. \n\n8. Cắt tỉa: \n\nCắt tỉa tạo hình cho cây mận khi cây còn non để tạo bộ khung tán cân đối, thông thoáng. \n\nHàng năm, cắt tỉa cành già cỗi, cành sâu bệnh, cành mọc chồng chéo hoặc mọc vào trong tán vào cuối mùa đông khi cây rụng hết lá (thời kỳ ngủ đông). Việc này giúp cây tập trung dinh dưỡng nuôi cành khỏe mạnh và quả, đồng thời hạn chế sâu bệnh. \n\n9. Kiểm soát cỏ dại: \n\nGiữ sạch cỏ xung quanh gốc cây để tránh cạnh tranh dinh dưỡng và nước. \n\nCó thể dùng vật liệu hữu cơ (rơm rạ, vỏ cây...) để tủ gốc, giúp giữ ẩm và hạn chế cỏ dại. \n\n10. Phòng trừ sâu bệnh: \n\nCây mận có thể gặp một số sâu bệnh như rệp, sâu đục thân, bệnh thối nâu quả, bệnh đốm lá... \n\nThường xuyên kiểm tra vườn cây để phát hiện sớm các dấu hiệu sâu bệnh. \n\nÁp dụng các biện pháp phòng trừ tổng hợp (IPM), ưu tiên biện pháp canh tác, sinh học. Chỉ sử dụng thuốc bảo vệ thực vật khi cần thiết và tuân thủ đúng hướng dẫn. \n\nLưu ý: Các loại sâu bệnh cụ thể và cách phòng trừ hiệu quả nhất có thể khác nhau tùy theo vùng. \n\n11. Thu hoạch: \n\nThu hoạch quả khi quả đã chín tới, có màu sắc đặc trưng của giống và độ cứng phù hợp."
         },
-        entities: ["dừa", "xoài", "cà phê", "tiêu", "đậu phộng", "vải", "dưa hấu", "bơ", "táo", "đu đủ", "nha đam", "trà", "cà chua", "sắn", "mãng cầu", "ớt", "mít", "dưa leo", "chuối", "keo", "mận"],
+        entities: PlantList.getAllPlants(),
         context: "cultivation_techniques"
     },
 
@@ -123,7 +127,7 @@ module.exports = {
         ],
         responses: {
             "dừa": "Dưới đây là một số bệnh thường gặp ở cây dừa: \n\n1. Bệnh thối đọt (Bud Rot): Đây là một trong những bệnh nguy hiểm nhất, do nấm gây ra. Bệnh tấn công phần đọt non (chồi ngọn) của cây dừa, làm cho lá non bị thối rữa, có mùi hôi. Nếu không phát hiện và xử lý kịp thời, bệnh có thể làm chết cây. \n\n2. Bệnh chảy nhựa thân (Stem Bleeding): Bệnh này do nấm gây ra, làm xuất hiện các vết nứt trên thân cây, từ đó chảy ra chất lỏng màu nâu đỏ giống như nhựa cây. Vết bệnh có thể lan rộng và làm suy yếu thân cây. \n\n3. Bệnh đốm lá (Leaf Spot): Có nhiều loại nấm gây bệnh đốm lá trên cây dừa, tạo ra các vết đốm có hình dạng và màu sắc khác nhau trên tàu lá. Bệnh nặng có thể làm lá bị khô cháy và rụng sớm, ảnh hưởng đến khả năng quang hợp của cây. \n\n4. Bệnh thối rễ (Root Rot): Bệnh này ảnh hưởng đến hệ thống rễ của cây, làm rễ bị thối, cây kém phát triển, lá vàng héo và có thể chết. Bệnh thường liên quan đến điều kiện đất đai kém thoát nước hoặc bị nhiễm nấm trong đất. \n\n5. Bệnh vàng lá (Lethal Yellowing): Đây là một bệnh rất nghiêm trọng do phytoplasma gây ra, lây lan qua côn trùng. Bệnh làm cho lá dừa chuyển sang màu vàng từ dưới lên, quả non rụng sớm, và cuối cùng là chết đọt, chết cây. Bệnh này đặc biệt nguy hiểm ở một số vùng trên thế giới. \n\n6. Bệnh thối trái (Fruit Rot): Nấm hoặc vi khuẩn có thể tấn công trái dừa ở các giai đoạn phát triển, gây thối mềm, biến màu và rụng trái.",
-            "lúa": "Bệnh đạo ôn (Rice blast) \n\nTriệu chứng nhận biết:\n\nTrên lá: Vết bệnh hình thoi, tâm màu xám tro, viền nâu đỏ. Vết bệnh có thể lan rộng làm cháy khô cả lá (gọi là cháy lá).\n\nTrên cổ bông, đốt thân, cổ gié, hạt: Vết bệnh màu nâu sẫm, làm gãy gục (thối cổ bông, thối đốt). Hạt lúa bị lép lửng hoặc đen.\n\nBiện pháp phòng và trị:\n\nPhòng: Sử dụng giống lúa kháng bệnh. Vệ sinh đồng ruộng, thu gom và tiêu hủy tàn dư cây bệnh. Bón phân cân đối, tránh bón thừa đạm. Điều chỉnh mực nước phù hợp.\n\nTrị: Sử dụng thuốc bảo vệ thực vật đặc trị bệnh đạo ôn theo hướng dẫn của cơ quan chuyên môn hoặc nhà sản xuất. Phun thuốc khi bệnh mới xuất hiện.\n\n2. Bệnh khô vằn (Sheath blight) \n\nTriệu chứng nhận biết:\n\nVết bệnh ban đầu là đốm bầu dục màu xanh xám trên bẹ lá sát mặt nước.\n\nVết bệnh lan rộng thành hình vằn da hổ, màu nâu và trắng xám, có viền bất định.\n\nBệnh lan nhanh lên các bẹ lá phía trên, thân và lá, làm cây bị khô héo, chết.\n\nBiện pháp phòng và trị:\n\nPhòng: Vệ sinh đồng ruộng, cày vùi tàn dư cây bệnh. Trồng mật độ hợp lý, không quá dày. Bón phân cân đối, tránh bón thừa đạm. Quản lý nước, không để nước ngập quá cao trong thời gian dài.\n\nTrị: Sử dụng thuốc bảo vệ thực vật đặc trị bệnh khô vằn. Phun thuốc vào gốc và thân cây khi bệnh chớm xuất hiện ở các bẹ lá dưới.\n\n3. Bệnh bạc lá (Bacterial blight) \n\nTriệu chứng nhận biết:\n\nTrên lá: Vết bệnh ban đầu là sọc úng nước ở mép lá, sau đó lan rộng thành vệt màu vàng nhạt hoặc trắng đục, có đường lượn sóng ở rìa vết bệnh. Vết bệnh có thể lan dọc theo gân lá làm cháy khô cả lá.\n\nỞ giai đoạn mạ: Cây bị héo xanh, lá non xoắn lại và chết khô (gọi là cháy mạ).\n\nBiện pháp phòng và trị:\n\nPhòng: Sử dụng giống lúa kháng bệnh. Vệ sinh đồng ruộng, thu gom và tiêu hủy tàn dư cây bệnh. Tránh gây vết thương cơ giới cho cây khi chăm sóc. Hạn chế đi lại trong ruộng khi lúa bị bệnh.\n\nTrị: Sử dụng thuốc bảo vệ thực vật gốc đồng hoặc kháng sinh đặc trị vi khuẩn. Phun thuốc khi bệnh mới xuất hiện.\n\n4. Bệnh vàng lùn, lùn xoắn lá (Rice yellow dwarf, Rice ragged stunt) \n\nTriệu chứng nhận biết:\n\nCây bị lùn hẳn so với cây bình thường.\n\nLá có màu vàng cam hoặc vàng nhạt.\n\nLá có thể bị xoắn, gân lá sưng lên (bệnh lùn xoắn lá).\n\nCây bị bệnh thường không trổ bông hoặc trổ bông không thoát, hạt lép.\n\nBiện pháp phòng và trị:\n\nPhòng: Đây là bệnh do virus gây ra và lây truyền chủ yếu qua rầy nâu. Biện pháp phòng bệnh hiệu quả nhất là diệt trừ rầy nâu. Vệ sinh đồng ruộng, tiêu diệt lúa chét, cỏ dại là nơi trú ngụ của rầy. Tránh gieo cấy quá dày.\n\nTrị: Hiện chưa có thuốc đặc trị bệnh virus trên lúa. Biện pháp chủ yếu là nhổ bỏ và tiêu hủy cây bị bệnh nặng để tránh lây lan. Tập trung diệt rầy nâu truyền bệnh.",
+            "lúa": "1. Bệnh đạo ôn (Rice blast) \n\nTriệu chứng nhận biết:\n\nTrên lá: Vết bệnh hình thoi, tâm màu xám tro, viền nâu đỏ. Vết bệnh có thể lan rộng làm cháy khô cả lá (gọi là cháy lá).\n\nTrên cổ bông, đốt thân, cổ gié, hạt: Vết bệnh màu nâu sẫm, làm gãy gục (thối cổ bông, thối đốt). Hạt lúa bị lép lửng hoặc đen.\n\nBiện pháp phòng và trị:\n\nPhòng: Sử dụng giống lúa kháng bệnh. Vệ sinh đồng ruộng, thu gom và tiêu hủy tàn dư cây bệnh. Bón phân cân đối, tránh bón thừa đạm. Điều chỉnh mực nước phù hợp.\n\nTrị: Sử dụng thuốc bảo vệ thực vật đặc trị bệnh đạo ôn theo hướng dẫn của cơ quan chuyên môn hoặc nhà sản xuất. Phun thuốc khi bệnh mới xuất hiện.\n\n2. Bệnh khô vằn (Sheath blight) \n\nTriệu chứng nhận biết:\n\nVết bệnh ban đầu là đốm bầu dục màu xanh xám trên bẹ lá sát mặt nước.\n\nVết bệnh lan rộng thành hình vằn da hổ, màu nâu và trắng xám, có viền bất định.\n\nBệnh lan nhanh lên các bẹ lá phía trên, thân và lá, làm cây bị khô héo, chết.\n\nBiện pháp phòng và trị:\n\nPhòng: Vệ sinh đồng ruộng, cày vùi tàn dư cây bệnh. Trồng mật độ hợp lý, không quá dày. Bón phân cân đối, tránh bón thừa đạm. Quản lý nước, không để nước ngập quá cao trong thời gian dài.\n\nTrị: Sử dụng thuốc bảo vệ thực vật đặc trị bệnh khô vằn. Phun thuốc vào gốc và thân cây khi bệnh chớm xuất hiện ở các bẹ lá dưới.\n\n3. Bệnh bạc lá (Bacterial blight) \n\nTriệu chứng nhận biết:\n\nTrên lá: Vết bệnh ban đầu là sọc úng nước ở mép lá, sau đó lan rộng thành vệt màu vàng nhạt hoặc trắng đục, có đường lượn sóng ở rìa vết bệnh. Vết bệnh có thể lan dọc theo gân lá làm cháy khô cả lá.\n\nỞ giai đoạn mạ: Cây bị héo xanh, lá non xoắn lại và chết khô (gọi là cháy mạ).\n\nBiện pháp phòng và trị:\n\nPhòng: Sử dụng giống lúa kháng bệnh. Vệ sinh đồng ruộng, thu gom và tiêu hủy tàn dư cây bệnh. Tránh gây vết thương cơ giới cho cây khi chăm sóc. Hạn chế đi lại trong ruộng khi lúa bị bệnh.\n\nTrị: Sử dụng thuốc bảo vệ thực vật gốc đồng hoặc kháng sinh đặc trị vi khuẩn. Phun thuốc khi bệnh mới xuất hiện.\n\n4. Bệnh vàng lùn, lùn xoắn lá (Rice yellow dwarf, Rice ragged stunt) \n\nTriệu chứng nhận biết:\n\nCây bị lùn hẳn so với cây bình thường.\n\nLá có màu vàng cam hoặc vàng nhạt.\n\nLá có thể bị xoắn, gân lá sưng lên (bệnh lùn xoắn lá).\n\nCây bị bệnh thường không trổ bông hoặc trổ bông không thoát, hạt lép.\n\nBiện pháp phòng và trị:\n\nPhòng: Đây là bệnh do virus gây ra và lây truyền chủ yếu qua rầy nâu. Biện pháp phòng bệnh hiệu quả nhất là diệt trừ rầy nâu. Vệ sinh đồng ruộng, tiêu diệt lúa chét, cỏ dại là nơi trú ngụ của rầy. Tránh gieo cấy quá dày.\n\nTrị: Hiện chưa có thuốc đặc trị bệnh virus trên lúa. Biện pháp chủ yếu là nhổ bỏ và tiêu hủy cây bị bệnh nặng để tránh lây lan. Tập trung diệt rầy nâu truyền bệnh.",
             "xoài": "Cây xoài có thể bị nhiều loại bệnh tấn công, ảnh hưởng đến năng suất và chất lượng quả. Dưới đây là một số bệnh thường gặp trên cây xoài: \n\n1. Bệnh thán thư (Anthracnose) \n\nTác nhân: Do nấm Colletotrichum gloeosporioides gây ra.\n\nTriệu chứng: Bệnh có thể gây hại trên nhiều bộ phận của cây như lá, cành, hoa và quả.\n\nTrên lá: Vết bệnh ban đầu là đốm nhỏ màu nâu đen, sau đó lan rộng và có thể làm cháy khô lá.\n\nTrên hoa: Làm khô và rụng hoa.\n\nTrên quả: Vết bệnh là đốm đen tròn hoặc bất định, có thể làm thối quả, đặc biệt là khi quả chín.\n\nBiện pháp phòng và trị: Vệ sinh vườn, cắt tỉa cành bệnh, phun thuốc diệt nấm.\n\n2. Bệnh đốm đen (Bacterial black spot) \n\nTác nhân: Do vi khuẩn Xanthomonas campestris pv. mangiferaeindicae gây ra.\n\nTriệu chứng: Xuất hiện các đốm đen nhỏ, hơi gồ lên trên lá, cành và quả. Trên quả, các đốm này có thể nứt ra, tạo thành vết thương.\n\nBiện pháp phòng và trị: Cắt tỉa cành bệnh, thu gom quả rụng, phun thuốc gốc đồng hoặc kháng sinh đặc trị vi khuẩn.\n\n3. Bệnh khô đọt thối trái \n\nTriệu chứng: Xuất hiện các đốm sậm màu trên nhánh đọt, sau đó lan dần làm khô đọt. Bệnh cũng gây thối quả.\n\nBiện pháp phòng và trị: Cắt bỏ phần cành, quả bị bệnh, phun thuốc phòng trừ nấm.\n\n4. Bệnh phấn trắng (Powdery mildew) \n\nTác nhân: Do nấm Oidium mangiferae gây ra.\n\nTriệu chứng: Lớp nấm trắng như bột phấn xuất hiện trên hoa, lá non và quả non. Bệnh nặng làm hoa và quả non bị rụng.\n\nBiện pháp phòng và trị: Cắt tỉa cành tạo thông thoáng, phun thuốc diệt nấm đặc trị bệnh phấn trắng.\n\n5. Bệnh nấm hồng (Pink disease) \n\nTác nhân: Do nấm Corticium salmonicolor gây ra.\n\nTriệu chứng: Lớp nấm màu hồng phấn xuất hiện trên cành và thân cây. Bệnh nặng có thể làm chết cành hoặc cả cây.\n\nBiện pháp phòng và trị: Cạo sạch lớp nấm trên vỏ cây, quét vôi hoặc dung dịch thuốc diệt nấm lên vết bệnh. Cắt bỏ cành bị bệnh nặng.\n\n6. Bệnh thối trái (Fruit rot) \n\nTác nhân: Có thể do nhiều loại nấm hoặc vi khuẩn gây ra.\n\nTriệu chứng: Quả bị mềm nhũn, biến màu và thối rữa.\n\nBiện pháp phòng và trị: Vệ sinh vườn, thu gom quả rụng, phun thuốc phòng trừ nấm/vi khuẩn.\n\nBiện pháp chung để phòng trừ bệnh trên cây xoài:\n\nVệ sinh vườn: Thường xuyên dọn dẹp lá rụng, cành khô, quả rụng trong vườn để loại bỏ nguồn bệnh.\n\nCắt tỉa tạo tán: Cắt tỉa cành giúp vườn cây thông thoáng, giảm độ ẩm, hạn chế sự phát triển của nấm bệnh.\n\nBón phân cân đối: Bón phân đầy đủ và cân đối giúp cây khỏe mạnh, tăng sức đề kháng với bệnh.\n\nQuản lý nước: Tưới tiêu hợp lý, tránh để vườn bị ẩm thấp kéo dài.\n\nSử dụng giống kháng bệnh: Chọn các giống xoài có khả năng chống chịu tốt với các bệnh phổ biến.\n\nPhun thuốc bảo vệ thực vật: Sử dụng thuốc phòng trừ nấm hoặc vi khuẩn theo hướng dẫn khi bệnh chớm xuất hiện hoặc trong điều kiện thời tiết thuận lợi cho bệnh phát triển.\n\nViệc nhận biết sớm triệu chứng bệnh và áp dụng biện pháp phòng trừ kịp thời là rất quan trọng để bảo vệ vườn xoài của bạn.",
             "cà phê": "Các bệnh thường gặp trên cây cà phê bao gồm bệnh gỉ sắt, bệnh thối rễ, bệnh đốm nâu.",
             "tiêu": "Cây hồ tiêu là loại cây dễ bị nhiều loại sâu bệnh tấn công, gây thiệt hại nặng nề cho người trồng. Dưới đây là một số bệnh thường gặp nhất trên cây tiêu: \n\n1. Bệnh chết nhanh (Quick wilt) \n\nTác nhân: Chủ yếu do nấm Phytophthora spp. gây ra.\n\nTriệu chứng: Đây là bệnh nguy hiểm nhất trên cây tiêu. Bệnh thường xuất hiện và lây lan nhanh trong mùa mưa, đặc biệt ở những vườn tiêu không thoát nước tốt. Cây bị bệnh có biểu hiện héo rũ đột ngột, lá còn xanh nhưng rũ xuống, sau đó chuyển sang màu nâu và chết nhanh chóng chỉ trong vài ngày. Rễ cây bị thối đen.\n\nBiện pháp phòng và trị: Cải thiện hệ thống thoát nước, tránh ngập úng. Trồng tiêu trên trụ sống có khả năng kháng bệnh. Sử dụng thuốc diệt nấm đặc trị Phytophthora để phun hoặc tưới vào gốc khi bệnh mới xuất hiện.\n\n2. Bệnh chết chậm (Slow wilt / Yellowing disease) \n\nTác nhân: Do phức hợp nhiều yếu tố gây ra, bao gồm nấm (như Fusarium, Pythium), tuyến trùng hại rễ và điều kiện canh tác không thuận lợi.\n\nTriệu chứng: Bệnh tiến triển chậm hơn bệnh chết nhanh. Cây bị bệnh có biểu hiện vàng lá từ dưới gốc lên, lá rụng dần, cành khô héo. Rễ cây bị thối mục, kém phát triển. Cây suy yếu dần và chết sau một thời gian dài.\n\nBiện pháp phòng và trị: Cải tạo đất, tăng cường bón phân hữu cơ để cải thiện cấu trúc đất và hệ vi sinh vật có lợi. Quản lý tuyến trùng bằng biện pháp canh tác hoặc thuốc trừ tuyến trùng. Sử dụng thuốc diệt nấm để xử lý đất và tưới gốc.\n\n3. Bệnh thán thư (Anthracnose) \n\nTác nhân: Do nấm Colletotrichum gloeosporioides gây ra.\n\nTriệu chứng: Xuất hiện các đốm màu nâu đen trên lá, thân, cành và chùm quả. Trên lá, vết bệnh có thể lan rộng làm cháy lá. Trên quả, vết bệnh làm quả bị khô đen và rụng.\n\nBiện pháp phòng và trị: Cắt tỉa cành bệnh, thu gom tàn dư cây bệnh. Phun thuốc diệt nấm đặc trị bệnh thán thư.\n\n4. Bệnh khảm lá và xoắn lá (Mosaic and leaf curl) \n\nTác nhân: Do virus gây ra.\n\nTriệu chứng: Lá tiêu bị biến dạng, có các đốm hoặc vệt màu xanh đậm xen kẽ màu xanh nhạt (khảm lá). Lá có thể bị xoăn, nhỏ lại, gân lá sưng lên. Các lóng đốt của cây bị ngắn lại, làm cây thấp lùn. Triệu chứng này thường gặp ở vườn tiêu kiến thiết cơ bản.\n\nBiện pháp phòng và trị: Bệnh do virus hiện chưa có thuốc đặc trị. Biện pháp phòng bệnh là sử dụng giống sạch bệnh, tiêu diệt côn trùng truyền bệnh (như bọ trĩ). Nhổ bỏ và tiêu hủy cây bị bệnh nặng để tránh lây lan.\n\n5. Bệnh nấm hồng (Pink disease) \n\nTác nhân: Do nấm Corticium salmonicolor gây ra.\n\nTriệu chứng: Lớp nấm màu hồng phấn xuất hiện trên cành và thân cây. Bệnh nặng có thể làm chết cành.\n\nBiện pháp phòng và trị: Cạo sạch lớp nấm trên vỏ cây, quét vôi hoặc dung dịch thuốc diệt nấm lên vết bệnh. Cắt bỏ cành bị bệnh nặng.\n\n6. Tuyến trùng hại rễ (Root-knot nematodes) \n\nTác nhân: Chủ yếu do loài Meloidogyne incognita.\n\nTriệu chứng: Tuyến trùng tấn công rễ tiêu, gây ra các nốt sưng (u bướu) trên rễ. Rễ bị hại kém phát triển, không hút được nước và dinh dưỡng, làm cây bị vàng lá, còi cọc, suy yếu và dễ bị các loại nấm trong đất tấn công gây chết chậm. Tuyến trùng thường xuất hiện nhiều trong mùa nắng.\n\nBiện pháp phòng và trị: Cải tạo đất, tăng cường bón phân hữu cơ. Sử dụng các loại cây trồng xen hoặc cây phân xanh có tác dụng xua đuổi hoặc tiêu diệt tuyến trùng. Sử dụng thuốc trừ tuyến trùng khi mật độ tuyến trùng trong đất cao.\n\nBiện pháp chung để phòng trừ sâu bệnh trên cây tiêu:\n\nChọn giống và cây giống sạch bệnh: Sử dụng cây giống khỏe mạnh, có nguồn gốc rõ ràng và không mang mầm bệnh.\n\nCải tạo đất và hệ thống thoát nước: Đảm bảo đất tơi xốp, giàu mùn và thoát nước tốt, tránh ngập úng.\n\nTrồng trên trụ sống: Trụ sống (như cây lồng mức, cây muồng đen) giúp cải thiện điều kiện tiểu khí hậu trong vườn, cung cấp thêm dinh dưỡng và một số loại trụ sống còn có khả năng kháng bệnh.\n\nBón phân cân đối: Bón phân đầy đủ và cân đối, đặc biệt tăng cường bón phân hữu cơ để cải thiện sức khỏe của đất và cây.\n\nCắt tỉa tạo tán: Cắt tỉa cành giúp vườn tiêu thông thoáng, giảm độ ẩm, hạn chế sự phát triển của nấm bệnh.\n\nQuản lý cỏ dại: Làm sạch cỏ trong vườn để hạn chế cạnh tranh dinh dưỡng và nơi trú ngụ của sâu bệnh.\n\nThăm vườn thường xuyên: Theo dõi sát sao tình hình cây trồng để phát hiện sớm các dấu hiệu bất thường và có biện pháp xử lý kịp thời.\n\nSử dụng thuốc bảo vệ thực vật: Chỉ sử dụng thuốc khi cần thiết và tuân thủ nguyên tắc 4 đúng để đảm bảo hiệu quả và an toàn.\n\nPhòng bệnh là yếu tố then chốt trong canh tác hồ tiêu. Khi cây đã bị bệnh nặng, việc điều trị thường rất khó khăn và tốn kém.",
@@ -145,8 +149,65 @@ module.exports = {
             "cà chua": "Các bệnh phổ biến trên cây cà chua: \n\n1. Bệnh héo xanh vi khuẩn (Bacterial Wilt): \n\nDấu hiệu: Cây đột ngột héo, lá vẫn xanh nhưng không phục hồi. Cắt ngang thân cây sẽ thấy dịch vi khuẩn chảy ra.\n\nNguyên nhân: Do vi khuẩn Ralstonia solanacearum.\n\nPhòng ngừa: Sử dụng giống kháng bệnh, luân canh với cây không phải ký chủ.\n\nĐiều trị: Nhổ bỏ cây bệnh để tránh lây lan.\n\n2. Bệnh thán thư (Anthracnose): \n\nDấu hiệu: Xuất hiện các đốm tròn màu nâu đen trên lá, thân và quả, có thể gây thối quả.\n\nNguyên nhân: Do nấm Colletotrichum spp.\n\nPhòng ngừa: Vệ sinh đồng ruộng, thu gom tàn dư cây bệnh.\n\nĐiều trị: Sử dụng thuốc diệt nấm khi bệnh mới xuất hiện.\n\n3. Bệnh phấn trắng (Powdery Mildew): \n\nDấu hiệu: Xuất hiện lớp bột trắng trên lá, có thể làm lá vàng và khô.\n\nNguyên nhân: Do nấm gây ra.\n\nPhòng ngừa: Trồng giống kháng bệnh, tạo thông thoáng cho vườn.\n\nĐiều trị: Sử dụng thuốc diệt nấm đặc trị bệnh phấn trắng.\n\n4. Bệnh sương mai (Downy Mildew): \n\nDấu hiệu: Xuất hiện các đốm vàng nhạt trên lá, mặt dưới có lớp mốc màu xám tím.\n\nNguyên nhân: Do nấm Peronospora spp.\n\nPhòng ngừa: Vệ sinh vườn, tránh tưới nước lên lá vào buổi chiều tối.\n\nĐiều trị: Sử dụng thuốc diệt nấm có hoạt chất như Metalaxyl.\n\n5. Bệnh virus khảm (Tomato Mosaic Virus): \n\nDấu hiệu: Lá cây biến dạng, xuất hiện các vết khảm xanh đậm và xanh nhạt.\n\nNguyên nhân: Do virus, lây truyền qua côn trùng.\n\nPhòng ngừa: Sử dụng giống kháng bệnh, kiểm soát côn trùng gây hại.\n\nĐiều trị: Nhổ bỏ cây bệnh ngay khi phát hiện.",
             "mận": "Dưới đây là một số bệnh thường gặp ở cây mận: \n\n1. Bệnh thối trái (Fruit Rot): Nấm hoặc vi khuẩn có thể tấn công trái mận, gây thối mềm, chuyển màu và rụng trái khi còn non. Bệnh này thường xảy ra trong điều kiện ẩm ướt. \n\n2. Bệnh đốm lá (Leaf Spot): Do nấm gây ra, bệnh này tạo ra các vết đốm nâu hoặc đen trên lá. Nếu không được kiểm soát, bệnh có thể làm lá vàng và rụng sớm, ảnh hưởng đến quang hợp. \n\n3. Bệnh héo rũ (Wilting): Đây là bệnh do nấm hoặc vi khuẩn gây ra, khiến cây héo rũ, lá chuyển vàng và có thể dẫn đến chết cây. Bệnh thường liên quan đến rễ bị thối hoặc điều kiện đất kém. \n\n4. Bệnh phấn trắng (Powdery Mildew): Bệnh này xuất hiện dưới dạng lớp bột trắng trên lá và cành. Nó làm giảm khả năng quang hợp và phát triển của cây. \n\n5. Bệnh sâu đục quả (Fruit Borer): Loại sâu này đục vào quả mận, gây ra các lỗ nhỏ và làm quả bị thối. Nếu không kiểm soát kịp thời, chúng có thể làm giảm năng suất. \n\n6. Bệnh vàng lá (Yellowing Disease): Do virus gây ra, bệnh này khiến lá chuyển sang màu vàng, cây phát triển kém và có thể dẫn đến chết cây. Bệnh thường lây lan qua côn trùng."
         },
-        entities: ["lúa", "xoài", "cà phê", "tiêu", "đậu phộng", "vải", "dưa hấu", "bơ", "táo", "đu đủ", "nha đam", "trà", "cà chua", "sắn", "mãng cầu", "ớt", "mít", "dưa leo", "chuối", "keo", "mận", "dừa"],
+        entities: PlantList.getAllPlants(),
 
+    },
+    cong_dung: {
+        patterns: [
+            "công dụng của cây {cây}",
+            "cây {cây} có tác dụng gì?",
+            "lợi ích của cây {cây} là gì?",
+            "cây {cây} dùng để làm gì?",
+            "tác dụng của cây {cây}?",
+            "Cây {cây} có ích gì?",
+            "{cây} có những lợi ích gì?",
+            "{cây} được sử dụng như thế nào?",
+            "{cây} có công dụng ra sao?",
+            "{cây} có thể dùng để làm gì?",
+            "Tác dụng chính của cây {cây} là gì?",
+            "Cây {cây} có lợi ích gì cho sức khỏe?",
+            "Cây {cây} thường được dùng trong những trường hợp nào?",
+            "Cây {cây} có ứng dụng gì trong đời sống?"
+        ],
+        responses: {
+            "đậu phộng": "Đậu phộng có tác dụng bổ sung protein và chất béo tốt cho cơ thể.",
+            "vải": "Quả vải chứa nhiều vitamin C, giúp tăng cường hệ miễn dịch.",
+            "dưa hấu": "Dưa hấu giúp cung cấp nước và vitamin A, tốt cho da.",
+            "bơ": "Bơ giàu chất béo không bão hòa, tốt cho tim mạch.",
+            "táo": "Táo giúp giảm cholesterol và hỗ trợ tiêu hóa.",
+            "cà phê": "Cà phê giúp tăng cường sự tỉnh táo và cải thiện tâm trạng.",
+            "keo": "Gỗ keo được sử dụng trong xây dựng và làm đồ nội thất.",
+            "mít": "Trái mít chứa nhiều vitamin và chất xơ, tốt cho tiêu hóa.",
+            "đu đủ": "Đu đủ giúp hỗ trợ tiêu hóa và có tác dụng chống viêm.",
+            "dưa leo": "Dưa leo giúp cung cấp nước và làm mát cơ thể.",
+            "xoài": "Xoài chứa nhiều vitamin C và A, có lợi cho sức khỏe mắt.",
+            "chuối": "Chuối cung cấp năng lượng nhanh và giàu kali.",
+            "mận": "Mận giúp cải thiện tiêu hóa và có tác dụng chống oxy hóa.",
+            "dừa": "Nước dừa giúp cung cấp điện giải và bổ sung nước.",
+            "cà chua": "Cà chua chứa lycopene, giúp bảo vệ tim mạch.",
+            "nha đam": "Nha đam có tác dụng làm mát, giảm viêm và làm đẹp da.",
+            "trà": "Trà chứa chất chống oxy hóa, tốt cho sức khỏe tim mạch.",
+            "sắn": "Sắn là nguồn cung cấp năng lượng và có thể dùng trong ẩm thực.",
+            "mãng cầu": "Mãng cầu có tác dụng hỗ trợ tiêu hóa và tăng cường miễn dịch.",
+            "ớt": "Ớt chứa capsaicin, có tác dụng giảm đau và tăng cường trao đổi chất."
+        },
+        entities: PlantList.getAllPlants(),
+        context: "benefits"
+    },
+
+    cam_on: {
+        patterns: [
+            "cảm ơn", "cảm ơn bạn", "cảm ơn rất nhiều",
+            "thank you", "thanks", "cảm ơn đã giúp đỡ"
+        ],
+        responses: [
+            "Cảm ơn bạn đã sử dụng dịch vụ! Nếu cần thêm thông tin, hãy quay lại nhé.",
+            "Rất vui được giúp bạn! Chúc bạn một ngày tốt lành.",
+            "Cảm ơn! Nếu có câu hỏi nào khác, đừng ngần ngại hỏi tôi.",
+            "Cảm ơn bạn! Hy vọng thông tin hữu ích cho bạn.",
+            "Cảm ơn đã tin tưởng! Chúc bạn thành công với cây trồng của mình."
+        ],
+        context: "thank_you"
     },
 
     hello_en: {
@@ -167,12 +228,29 @@ module.exports = {
             "{plant} scientific name"
         ],
         responses: {
-            "rice": "The scientific name of rice is Oryza sativa L.",
-            "mango": "The scientific name of mango is Mangifera indica.",
-            "coffee": "The scientific name of coffee is Coffea spp.",
-            "pepper": "The scientific name of pepper is Piper nigrum."
+            "peanut": "The scientific name of the peanut plant is Arachis hypogaea.",
+            "lychee": "The scientific name of the lychee plant is Litchi chinensis.",
+            "watermelon": "The scientific name of the watermelon plant is Citrullus lanatus.",
+            "avocado": "The scientific name of the avocado plant is Persea americana.",
+            "apple": "The scientific name of the apple tree is Malus domestica.",
+            "coffee": "The scientific name of the coffee plant is Coffea spp.",
+            "acacia": "The scientific name of the acacia tree is Acacia spp.",
+            "jackfruit": "The scientific name of the jackfruit tree is Artocarpus heterophyllus.",
+            "papaya": "The scientific name of the papaya plant is Carica papaya.",
+            "cucumber": "The scientific name of the cucumber plant is Cucumis sativus.",
+            "mango": "The scientific name of the mango tree is Mangifera indica.",
+            "banana": "The scientific name of the banana plant is Musa spp.",
+            "plum": "The scientific name of the plum tree is Prunus salicina.",
+            "coconut": "The scientific name of the coconut tree is Cocos nucifera.",
+            "tomato": "The scientific name of the tomato plant is Solanum lycopersicum.",
+            "aloe vera": "The scientific name of the aloe vera plant is Aloe vera.",
+            "tea": "The scientific name of the tea plant is Camellia sinensis.",
+            "cassava": "The scientific name of the cassava plant is Manihot esculenta.",
+            "soursop": "The scientific name of the soursop plant is Annona spp.",
+            "chili": "The scientific name of the chili plant is Capsicum spp."
+
         },
-        entities: ["rice", "mango", "coffee", "pepper"],
+        entities: PlantList.getAllPlantsEn(),
         context: "scientific_name_en"
     },
     plant_uses_en: {
@@ -183,13 +261,29 @@ module.exports = {
             "uses of {plant}"
         ],
         responses: {
-            "rice": "Rice is mainly grown for its grains, which are a staple food.",
-            "mango": "Mango is eaten fresh, made into smoothies, jams, juices, and desserts.",
-            "coffee": "Coffee is used to make one of the world's most popular beverages.",
-            "pepper": "Pepper is an important spice used to enhance the flavor of dishes."
+            "peanut": "Peanuts are beneficial for providing protein and healthy fats.",
+            "lychee": "Lychee contains a lot of vitamin C, which boosts the immune system.",
+            "watermelon": "Watermelon helps provide hydration and vitamin A, good for the skin.",
+            "avocado": "Avocado is rich in unsaturated fats, which are good for heart health.",
+            "apple": "Apples help reduce cholesterol and support digestion.",
+            "coffee": "Coffee enhances alertness and improves mood.",
+            "acacia": "Acacia wood is used in construction and making furniture.",
+            "jackfruit": "Jackfruit contains many vitamins and fiber, beneficial for digestion.",
+            "papaya": "Papaya aids digestion and has anti-inflammatory properties.",
+            "cucumber": "Cucumber provides hydration and cools the body.",
+            "mango": "Mango is high in vitamins C and A, beneficial for eye health.",
+            "banana": "Bananas provide quick energy and are rich in potassium.",
+            "plum": "Plums improve digestion and have antioxidant effects.",
+            "coconut": "Coconut water provides electrolytes and hydration.",
+            "tomato": "Tomatoes contain lycopene, which helps protect heart health.",
+            "aloe vera": "Aloe vera cools, reduces inflammation, and improves skin health.",
+            "tea": "Tea contains antioxidants, beneficial for heart health.",
+            "cassava": "Cassava is a source of energy and can be used in cooking.",
+            "soursop": "Soursop helps with digestion and boosts the immune system.",
+            "chili": "Chili contains capsaicin, which reduces pain and boosts metabolism."
         },
-        entities: ["rice", "mango", "coffee", "pepper"],
+        entities: PlantList.getAllPlantsEn(),
         context: "uses_en"
     }
     // Có thể thêm các intents khác
-};
+}; // Có thể thêm các intents khác

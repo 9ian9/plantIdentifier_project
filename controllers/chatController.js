@@ -16,7 +16,7 @@ async function updateChatSession(sessionId, role, content) {
         if (!sessionId) {
             // Tạo phiên mới chỉ khi không có sessionId
             const newSessionId = uuidv4();
-            const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+            const title = content.substring(0, 20) + (content.length > 20 ? '...' : '');
 
             chatSession = await ChatSession.create({
                 sessionId: newSessionId,
@@ -34,7 +34,7 @@ async function updateChatSession(sessionId, role, content) {
 
             if (!chatSession) {
                 // Nếu không tìm thấy session, tạo mới
-                const title = content.substring(0, 30) + (content.length > 30 ? '...' : '');
+                const title = content.substring(0, 20) + (content.length > 20 ? '...' : '');
                 chatSession = await ChatSession.create({
                     sessionId,
                     messages: [messageContent],
@@ -53,11 +53,9 @@ async function updateChatSession(sessionId, role, content) {
 exports.handleChat = async(req, res) => {
     try {
         const { message, userMessage, sessionId } = req.body;
-        console.log('[handleChat] userMessage:', userMessage, '| message:', message, '| sessionId:', sessionId);
 
         const nlpResult = await chatService.processMessage(message, userMessage);
         const response = nlpResult && nlpResult.response ? nlpResult.response : nlpResult;
-        console.log('[handleChat] entity:', nlpResult && nlpResult.entity, '| response:', response);
 
         // Sử dụng updateChatSession để xử lý tin nhắn người dùng
         const currentSessionId = await updateChatSession(sessionId, 'user', userMessage || message);
@@ -92,7 +90,6 @@ exports.getChatHistory = async(req, res) => {
     }
 };
 
-// Thêm vào chatController.js
 exports.renderIndex = async(req, res) => {
     try {
         const sessions = await ChatSession.find()
@@ -102,13 +99,15 @@ exports.renderIndex = async(req, res) => {
 
         res.render('index', {
             chatSessions: sessions,
-            uploadedImage: req.query.uploadedImage || null
+            uploadedImage: req.query.uploadedImage || null,
+            currentSessionId: req.query.sessionId || null
         });
     } catch (error) {
         console.error('Error rendering index:', error);
         res.render('index', {
             chatSessions: [],
-            uploadedImage: req.query.uploadedImage || null
+            uploadedImage: req.query.uploadedImage || null,
+            currentSessionId: req.query.sessionId || null
         });
     }
 };

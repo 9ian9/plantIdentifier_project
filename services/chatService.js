@@ -51,6 +51,17 @@ class ChatService {
                 };
             }
 
+            // Xử lý intent cảm ơn
+            if (intentResult.intent === 'cam_on') {
+                if (!intent.responses || !Array.isArray(intent.responses) || intent.responses.length === 0) {
+                    return { response: RESPONSES.UNKNOWN, entity: null };
+                }
+                return {
+                    response: intent.responses[Math.floor(Math.random() * intent.responses.length)],
+                    entity: intentResult.entity || null
+                };
+            }
+
             // Xử lý các intent khác có responses là mảng
             if (intent.responses && Array.isArray(intent.responses)) {
                 return {
@@ -92,8 +103,6 @@ class ChatService {
     }
 
     generateResponse(intentConfig, entities) {
-        // Logic này có vẻ không còn cần thiết với cách xử lý mới trong processMessage
-        // Bạn có thể cân nhắc loại bỏ hoặc điều chỉnh nếu vẫn cần.
         if (entities.length > 0 && typeof intentConfig.responses === 'object') {
             for (const entity of entities) {
                 if (intentConfig.responses[entity]) {

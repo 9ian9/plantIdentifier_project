@@ -1,41 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const inputArea = document.querySelector('.input-area input[type="text"]');
-    const sendButton = document.querySelector('.input-area .send-btn');
-    const attachButton = document.querySelector('.input-area .attach-btn');
-    const mainContent = document.querySelector('.main-content');
     const chatHistory = document.querySelector('.chat-history');
-    const welcomeArea = document.querySelector('.welcome-area');
-    const imageUpload = document.getElementById('image-upload');
-    let chatStarted = false;
-    let currentSessionId = null;
+    const chatSessionsList = document.getElementById('chatSessionsList');
 
-    // Danh sách entity mẫu lấy từ intents.js
-    const PLANT_ENTITIES = [
-        'đậu phộng', 'vải', 'dưa hấu', 'bơ', 'táo', 'cà phê', 'keo', 'mít', 'đu đủ',
-        'dưa leo', 'xoài', 'chuối', 'mận', 'dừa', 'cà chua', 'nha đam', 'trà', 'sắn',
-        'mãng cầu', 'ớt', 'tiêu', 'lúa'
-    ];
-
-    function setCurrentTopic(topic) {
-        localStorage.setItem('currentTopic', topic);
-    }
-
-    function getCurrentTopic() {
-        return localStorage.getItem('currentTopic') || '';
-    }
-
-    // Thêm hàm refreshChatSessions
+    // Hàm làm mới danh sách lịch sử chat
     async function refreshChatSessions() {
         try {
             const response = await fetch('/chat/history/sessions');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
             const sessions = await response.json();
-            const chatSessionsList = document.getElementById('chatSessionsList');
             if (!chatSessionsList) return;
 
-            chatSessionsList.innerHTML = ''; // Xóa các session cũ
+            chatSessionsList.innerHTML = '';
 
             if (sessions.length > 0) {
                 sessions.forEach(session => {
@@ -62,17 +37,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     chatSessionsList.appendChild(li);
                 });
             } else {
-                chatSessionsList.innerHTML = '<li class="no-sessions">No recent chats</li>';
+                chatSessionsList.innerHTML = '<li class="no-sessions">Chưa có lịch sử trò chuyện</li>';
             }
         } catch (error) {
             console.error('Error refreshing chat sessions:', error);
         }
     }
 
-    function scrollToBottom() {
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
 
+    // Hàm format nội dung bot trả về
     window.renderStructuredResponse = function(response) {
         // 1. Tìm phần text trước mục lớn (nếu có)
         const firstSectionMatch = response.match(/^(.*?)(?=\d+\..*?:)/s);
@@ -131,13 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return html;
     }
 
-    // Hàm chuyển file sang base64
-    function toBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = error => reject(error);
-        });
-    }
+    // Khởi động: load lịch sử chat
+    refreshChatSessions();
 });

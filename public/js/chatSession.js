@@ -37,6 +37,9 @@ async function refreshChatSessions() {
             sessions.forEach(session => {
                 const li = document.createElement('li');
                 li.className = 'chat-session';
+                if (session.sessionId === currentSessionId) {
+                    li.classList.add('active-chat-session');
+                }
                 li.dataset.sessionId = session.sessionId;
 
                 li.innerHTML = `
@@ -45,7 +48,7 @@ async function refreshChatSessions() {
                         <input type="text" class="title-edit" value="${session.title || 'New Chat'}" style="display: none;">
                     </div>
                     <div class="session-preview">
-                        ${(session.messages[0]?.content || '').substring(0, 30)}${(session.messages[0]?.content?.length > 30 ? '...' : '')}
+                        ${(session.messages[0]?.content || '').substring(0, 20)}${(session.messages[0]?.content?.length > 20 ? '...' : '')}
                     </div>
                     <div class="session-date">
                         ${new Date(session.updatedAt).toLocaleString()}
