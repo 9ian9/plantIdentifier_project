@@ -1,4 +1,4 @@
-const ort = require('onnxruntime-node');
+const ort = require('onnxruntime');
 const sharp = require('sharp');
 
 /**
@@ -33,7 +33,6 @@ async function predictPlant(bufferImage, onnxSession) {
     // Tạo tensor input
     const tensor = new ort.Tensor('float32', chwData, [1, 3, 224, 224]);
 
-    // Tên input của model có thể khác, bạn kiểm tra bằng netron hoặc model info
     const feeds = {};
     feeds[onnxSession.inputNames[0]] = tensor;
 

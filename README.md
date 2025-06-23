@@ -34,6 +34,8 @@
 
    - npm install vntk@latest natural fast-levenshtein
 
+   - npm install express multer sharp onnxruntime uuid
+
 Run
 Open http://localhost:3000 with your browser to see the result.
 
