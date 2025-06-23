@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const ort = require('onnxruntime');
+const ort = require('onnxruntime-node');
 const app = express();
 const port = 3000;
 

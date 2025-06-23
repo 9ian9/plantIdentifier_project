@@ -1,4 +1,4 @@
-const ort = require('onnxruntime');
+const ort = require('onnxruntime-node');
 const sharp = require('sharp');
 
 /**
