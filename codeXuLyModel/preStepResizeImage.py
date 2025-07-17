@@ -43,8 +43,7 @@ def normalize_images(input_folder, output_folder, target_size=(224, 224)):
             print(f"Error processing {img_file}: {str(e)}")
 
 
-# Sử dụng hàm
-input_folder = "F:/code_XLSS/data/banana_images"  # Thay bằng đường dẫn thực tế
-output_folder = "output/banana_images"  # Thư mục đầu ra
+input_folder = "F:/code_XLSS/data/banana_images" 
+output_folder = "output/banana_images"  
 
 normalize_images(input_folder, output_folder)

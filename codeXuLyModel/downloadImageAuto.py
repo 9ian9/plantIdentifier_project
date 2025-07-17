@@ -44,7 +44,7 @@ def get_and_download_mangifera_photos(total_photos=1200):
 
         try:
             # Thêm delay giữa các request
-            time.sleep(1)  # Đảm bảo không vượt quá giới hạn API
+            time.sleep(1)  
 
             response = requests.get(url, timeout=15)
             response.raise_for_status()
@@ -80,5 +80,5 @@ def get_and_download_mangifera_photos(total_photos=1200):
 
 
 if __name__ == "__main__":
-    # Thay đổi số lượng ảnh muốn tải ở đây
+
     get_and_download_mangifera_photos(total_photos=10)
